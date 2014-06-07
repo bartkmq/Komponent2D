@@ -96,7 +96,7 @@ classes:
       type: *Text
       text: Example
       font:
-        file: tahoma
+        file: roboto
         size: 18
         style:  default
       alpha: 0.5

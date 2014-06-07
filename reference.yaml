@@ -71,7 +71,7 @@ GameObject:
       visible: true
       text: Example
       font:
-        file: tahoma
+        file: roboto
         size: 18
         style:  # can also be "default"
           bold: false # you don't have to list every parameter

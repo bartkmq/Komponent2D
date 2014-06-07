@@ -21,7 +21,7 @@ class Debug extends Component
 	
 	override public function added()
 	{
-		font = Loader.the.loadFont("tahoma", FontStyle.Default, 18);
+		font = Loader.the.loadFont("roboto", FontStyle.Default, 18);
 	}
 	
 	override public function debugDraw()
