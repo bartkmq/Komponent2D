@@ -1,6 +1,6 @@
 #Komponent2D
 This is a component based game engine for Kha.
-It's API is inspired by HaxePunk, Zerk and Unity3D.
+Its API is inspired by HaxePunk, Zerk and Unity3D.
 
 ##Requirements
 * **Kha**
