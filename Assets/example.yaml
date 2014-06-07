@@ -1,0 +1,130 @@
+---
+classes:
+  audio:
+    - &Music komponent.components.audio.Music
+    - &Sound komponent.components.audio.Sound
+  graphic:
+    - &Animation komponent.components.graphic.Animation
+    - &Image komponent.components.graphic.Image
+    - &Text komponent.components.graphic.Text
+  misc:
+    - &Camera komponent.components.misc.Camera
+    - &Debug komponent.components.misc.Debug
+  collider:
+    - &Circle komponent.components.physics.Circle
+    - &Hitbox komponent.components.physics.Hitbox
+    - &Polygon komponent.components.physics.Polygon
+  common:
+    - &Physics komponent.components.Physics
+    - &Transform komponent.components.Transform
+
+&Wabbit Wabbit:
+  name: Wabbit
+  components:
+    -
+      type: *Transform
+      x: 150
+      y: 120
+    -
+      type: *Image
+      file: wabbit
+
+    - type: *Physics
+    - type: *Debug
+
+    -
+      type: *Hitbox
+      width: 26
+      height: 37
+
+&Coin Coin:
+  name: Coin
+  components:
+    -
+      type: *Transform
+      x: 370
+      y: 180
+      scaleX: 5
+      scaleY: 5
+    -
+      type: *Animation
+      file: coinspin
+      frameWidth: 10
+      frameHeight: 10
+      animations:
+        -
+          name: spin
+          frames: [0, 1, 2, 3, 4, 5]
+          frameRate: 6
+          loop: true
+      play: spin
+
+    - type: *Physics
+
+    -
+      type: *Hitbox
+      width: 50
+      height: 50
+
+&Ground Ground:
+  name: Ground
+  components:
+    -
+      type: *Transform
+      x: 0
+      y: 475
+    -
+      type: *Hitbox
+      centerX: 320.0
+      centerY: 0.0
+      width: 640
+      height: 10
+    -
+      type: *Image
+      file: ground
+      tiledWidth: 700
+      tiledHeight: 10
+
+&HUD HUD:
+  name: HUD
+  components:
+    -
+      type: *Transform
+      x: 0
+      y: 0
+    -
+      type: *Text
+      text: Example
+      font:
+        file: tahoma
+        size: 18
+        style:  default
+      alpha: 0.5
+      color: white
+
+
+&TestScene TestScene:
+  type: Scene
+  gameObjects: [*Wabbit, *Coin, *Ground]
+  extensions: [Nape]
+
+Engine:
+  name: KomponentPunk
+  scene: *TestScene
+  paused: false
+  debug: true
+
+Screen:
+  #color: white
+  scaleX: 1
+  scaleY: 1
+  zoom: 1
+
+Input:
+  definitions:
+    -
+      name: restart
+      chars: [r]
+    -
+      name: debug
+      chars: [d]

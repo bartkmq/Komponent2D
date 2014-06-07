@@ -1,0 +1,58 @@
+{
+	"format": 1,
+	"game": {
+		"name": "Komponent2D",
+		"width": 640,
+		"height": 480
+	},
+	"assets": [
+		{
+			"id": "519a02c2-7859-451a-905b-2148aacd5d6d",
+			"type": "image",
+			"file": "wabbit.png",
+			"name": "wabbit"
+		},
+		{
+			"id": "9ed239cd-88b9-483f-bc86-bf8abe551a07",
+			"type": "blob",
+			"file": "tahoma18.kravur",
+			"name": "tahoma18.kravur"
+		},
+		{
+			"id": "3bb2b0dd-e70b-4029-84ea-4ef00f019879",
+			"type": "image",
+			"file": "coinspin.png",
+			"name": "coinspin"
+		},
+		{
+			"id": "bfcb048b-0d54-4d4d-bb98-077811b2c9ba",
+			"type": "blob",
+			"file": "example.yaml",
+			"name": "example"
+		},
+		{
+			"id": "ff3bc496-298f-4e27-8b68-446bbe28fc7a",
+			"type": "image",
+			"file": "ground.png",
+			"name": "ground"
+		}
+	],
+	"rooms": [
+		{
+			"id": "dd751897-5d29-438e-a1c3-5c03d885f32e",
+			"name": "default",
+			"parent": null,
+			"neighbours": [],
+			"assets": [
+				"519a02c2-7859-451a-905b-2148aacd5d6d",
+				"3bb2b0dd-e70b-4029-84ea-4ef00f019879",
+				"9ed239cd-88b9-483f-bc86-bf8abe551a07",
+				"bfcb048b-0d54-4d4d-bb98-077811b2c9ba",
+				"ff3bc496-298f-4e27-8b68-446bbe28fc7a"
+			]
+		}
+	],
+	"sources": [
+		"Libs"
+	]
+}

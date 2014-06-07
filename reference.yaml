@@ -1,0 +1,167 @@
+---
+classes:
+  audio:
+    - &Music komponent.components.audio.Music
+    - &Sound komponent.components.audio.Sound
+  graphic:
+    - &Animation komponent.components.graphic.Animation
+    - &Image komponent.components.graphic.Image
+    - &Text komponent.components.graphic.Text
+  misc:
+    - &Camera komponent.components.misc.Camera
+    - &Debug komponent.components.misc.Debug
+  collider:
+    - &Circle komponent.components.physics.Circle
+    - &Hitbox komponent.components.physics.Hitbox
+    - &Polygon komponent.components.physics.Polygon
+  common:
+    - &Physics komponent.components.Physics
+    - &Transform komponent.components.Transform
+
+GameObject:
+  active: true
+  name: GameObject
+  components:
+    -
+      type: *Transform
+      x: 0.0
+      y: 0.0
+      rotation: 0.0
+      centerX: 0.0
+      centerY: 0.0
+      scaleX: 5.0
+      scaleY: 5.0
+
+    -
+      type: *Image
+      file: wabbit
+      visible: true
+      alpha: 1.0
+      # a Color can be either String(#FFFFFFFF, white/black),
+      # Array([255, 255, 255], [1.0, 1.0, 1.0]) or Int
+      color: #FFFFFFFF
+      flipX: false
+      flipY: false
+      tiledWidth: 0
+      tiledHeight: 0
+      fillScreen: false
+      sourceRectangle: #if every value equals 0.0 this is ignored
+        height: 0.0
+        width: 0.0
+        x: 0.0
+        y: 0.0
+
+    -
+      # <<: Image
+      type: *Animation
+      file: coinspin
+      frameWidth: 10
+      frameHeight: 10
+      animations:
+        -
+          name: spin
+          frames: [0, 1, 2, 3, 4, 5]
+          frameRate: 6
+          loop: true
+      play: spin # The animation to play when the Animation is added.
+      rate: 1.0
+
+    -
+      type: *Text
+      visible: true
+      text: Example
+      font:
+        file: tahoma
+        size: 18
+        style:  # can also be "default"
+          bold: false # you don't have to list every parameter
+          italic: false
+          underlined: false
+      alpha: 1.0
+      color: #FFFFFFFF
+
+    -
+      type: *Camera
+
+    -
+      type: *Debug
+
+    - # Don't use this directly. Use either Circle, Hitbox or Polygon.
+      #type: Collider
+      centerX: 0.0
+      centerY: 0.0
+      isTrigger: false
+      material:
+        elasticity: 0.0
+        density: 1.0
+        dynamicFriction: 1.0
+        staticFriction: 2.0
+        rollingFriction: 0.001
+
+    -
+      # <<: Collider
+      type: *Circle
+      radius: 25.0
+
+    -
+      # <<: Collider
+      type: *Hitbox
+      width: 25.0
+      height: 25.0
+
+    -
+      # <<: Collider
+      type: *Polygon
+      regular:
+        radiusX: 25.0
+        radiusY: 25.0
+        edges: 5
+        angle: 0.0
+      vertices: [3.0, 3.0, 5.0, 5.0, 6.0, 6.0]
+
+    -
+      type: *Physics
+      velocityX: 0.0
+      velocityY: 0.0
+      angularVelocity: 0.0
+      mass: 1.0
+      bodyType: Dynamic
+      allowRotation: true
+      allowMovement: true
+      bullet: false
+      sleeping: false
+
+    -
+      type: *Music
+      file: something
+      volume: 1.0
+      position: 0
+      loop: true
+      play: true
+
+    -
+      type: *Sound
+      file: klick
+      volume: 1.0
+      position: 0
+      loop: true
+      play: false
+
+Screen:
+  color: #FFFFFFFF
+  scaleX: 1.0
+  scaleY: 1.0
+  zoom: 1.0
+
+Input:
+  definitions:
+    -
+      name: allKeys
+      chars: [a, b, c, z] # alphabet
+      buttons: [up, right, down, left, button1, button2] # Arrow keys and joypad
+      # Modifier keys and numpad arrow keys
+      modifiers: [backspace, tab, enter, shift, ctrl, alt, esc, del, up, down, left, right]
+    -
+      name: up
+      chars: [w]
+      buttons: [up]
