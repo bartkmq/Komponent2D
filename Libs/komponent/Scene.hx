@@ -1,9 +1,10 @@
 package komponent;
 
-import komponent.extension.Nape;
+import komponent.components.Graphic;
 import komponent.utils.Misc;
 import komponent.utils.Painter;
 import komponent.utils.Screen;
+import komponent.extension.Nape;
 
 using komponent.utils.Misc;
 
@@ -22,6 +23,7 @@ class Scene
 	public var engine:Engine;
 	
 	public var gameObjects:Array<GameObject>;
+	public var graphics:Array<Graphic>;
 	public var names:Map<String, List<GameObject>>;
 	
 	public var extensions:Array<Extension>;
@@ -33,6 +35,7 @@ class Scene
 	{
 		gameObjects = [];
 		names = new Map();
+		graphics = [];
 		extensions = [];
 	}
 	
@@ -88,10 +91,17 @@ class Scene
 			Painter.color = Screen.color;
 			Painter.clear();
 		}
+		/*
 		for (gameObject in gameObjects)
 		{
 			if (gameObject.active)
 				gameObject.render();
+		}
+		*/
+		for (graphic in graphics)
+		{
+			if (graphic.visible && graphic.gameObject.active)
+				graphic.render();
 		}
 		for (extension in extensions)
 		{
@@ -208,6 +218,28 @@ class Scene
 		{
 			getExtension(Type.resolveClass(extension));
 		}
+	}
+	
+	public inline function addGraphic(graphic:Graphic):Void
+	{
+		if (graphics.length == 0)
+			graphics.push(graphic);
+		else
+		{
+			for (i in 0...graphics.length)
+			{
+				if (graphics[i].layer >= graphic.layer)
+				{
+					graphics.insert(i, graphic);
+					break;
+				}
+			}
+		}
+	}
+	
+	public function removeGraphic(graphic:Graphic):Void
+	{
+		graphics.remove(graphic);
 	}
 	
 	@:noCompletion

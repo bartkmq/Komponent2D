@@ -64,12 +64,13 @@ class GameObject
 	public inline function render()
 	{
 		for (component in components)
-		{
 			component.render();
-			
-			if (scene.engine.debug)
-				component.debugDraw();
-		}
+	}
+	
+	public inline function debugDraw()
+	{
+		for (component in components)
+			component.debugDraw();
 	}
 	
 	/**

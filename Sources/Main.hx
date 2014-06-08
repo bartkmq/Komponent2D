@@ -1,6 +1,7 @@
 package;
 
 import kha.Starter;
+import komponent.utils.Point;
 
 import komponent.Engine;
 

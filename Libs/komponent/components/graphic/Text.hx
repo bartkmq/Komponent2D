@@ -59,7 +59,7 @@ class Text extends Graphic
 		visible = data.visible.parse(true);
 		text = data.text.parse("");
 		alpha = data.alpha.parse(1.0);
-		color = data.color.parse(Color.White);
+		color = data.color.parseColor(Color.White);
 		
 		var file:String = data.font.file;
 		var size:Float = data.font.size;

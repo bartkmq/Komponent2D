@@ -17,7 +17,7 @@ abstract Point(Vec2) from Vec2 to Vec2
 	}
 	
 	@:op(A + B)
-	public function add(point:Point)
+	private function add(point:Point)
 	{
 		this.x += point.x;
 		this.y += point.y;
@@ -25,7 +25,7 @@ abstract Point(Vec2) from Vec2 to Vec2
 	}
 	
 	@:op(A - B)
-	public function sub(point:Point)
+	private function sub(point:Point)
 	{
 		this.x -= point.x;
 		this.y -= point.y;
@@ -33,7 +33,7 @@ abstract Point(Vec2) from Vec2 to Vec2
 	}
 	
 	@:op(A * B)
-	public function mul(point:Point)
+	private function mul(point:Point)
 	{
 		this.x *= point.x;
 		this.y *= point.y;
@@ -41,7 +41,7 @@ abstract Point(Vec2) from Vec2 to Vec2
 	}
 	
 	@:op(A / B)
-	public function div(point:Point)
+	private function div(point:Point)
 	{
 		this.x /= point.x;
 		this.y /= point.y;

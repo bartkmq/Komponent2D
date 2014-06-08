@@ -31,7 +31,7 @@ class Screen
 	
 	public static function loadConfig(data:Dynamic):Void
 	{
-		color = data.color.parse(Color.White);
+		color = data.color.parseColor(Color.White);
 		scaleX = data.scaleX.parse(1.0);
 		scaleY = data.scaleY.parse(1.0);
 		scale = data.zoom.parse(1.0);

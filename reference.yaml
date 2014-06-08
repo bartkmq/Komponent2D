@@ -36,6 +36,7 @@ GameObject:
       type: *Image
       file: wabbit
       visible: true
+      layer: 0
       alpha: 1.0
       # a Color can be either String(#FFFFFFFF, white/black),
       # Array([255, 255, 255], [1.0, 1.0, 1.0]) or Int
@@ -165,3 +166,7 @@ Input:
       name: up
       chars: [w]
       buttons: [up]
+    -
+      name: quit
+      chars: [e]
+      modifiers: [ctrl]

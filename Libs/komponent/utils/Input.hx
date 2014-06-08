@@ -91,13 +91,11 @@ class Input //TODO: Fix pressed()
 	 * @param	chars		The keys to use for the Input.
 	 * @param	buttons		The buttons to use for the Input.
 	 * @param	modifiers	The modifiers to use for the Input.
+	 * @param	combination	If this Input defintion requires all keys to be pressed.
 	 */
-	public static inline function define(name:String, ?chars:Array<String> = null, ?buttons:Array<Button> = null, ?modifiers:Array<Key> = null)
+	public static inline function define(name:String, ?chars:Array<String> = null, ?buttons:Array<Button> = null, ?modifiers:Array<Key> = null, combination = false):Void
 	{
-		_controls[name] = true;
-		_controlsChars[name] = chars;
-		_controlsButtons[name] = buttons;
-		_controlsModifiers[name] = modifiers;
+		_definitions[name] = new InputDefinition(chars, buttons, modifiers, combination);
 	}
 	
 	/**
@@ -108,39 +106,41 @@ class Input //TODO: Fix pressed()
 	public static function check(input:String):Bool
 	{
 		// if Input doesn't exists return false
-		if (_controls[input] != true)
+		var definition = _definitions[input];
+		if (definition == null)
 			return false;
 		
-		var chars = _controlsChars[input];
+		var chars = definition.chars;
 		if (chars != null)
 		{
 			for (char in chars)
 			{
-				if (_pressedChars.indexOf(char) == -1)
-					return false;
+				// if key is pressed
+				if (_pressedChars.indexOf(char) != -1)
+					return true;
 			}
 		}
-		
-		var buttons = _controlsButtons[input];
+		var buttons = definition.buttons;
 		if (buttons != null)
 		{
 			for (button in buttons)
 			{
-				if (_pressedButtons.indexOf(button) == -1)
-					return false;
+				// if key is pressed
+				if (_pressedButtons.indexOf(button) != -1)
+					return true;
 			}
 		}
-		
-		var modifiers = _controlsModifiers[input];
+		var modifiers = definition.modifiers;
 		if (modifiers != null)
 		{
 			for (modifier in modifiers)
 			{
-				if (_pressedModifiers.indexOf(modifier) == -1)
-					return false;
+				// if key is pressed
+				if (_pressedModifiers.indexOf(modifier) != -1)
+					return true;
 			}
 		}
-		return true;
+		return false;
 	}
 	
 	/**
@@ -151,39 +151,41 @@ class Input //TODO: Fix pressed()
 	public static inline function pressed(input:String):Bool
 	{
 		// if Input doesn't exists return false
-		if (_controls[input] != true)
+		var definition = _definitions[input];
+		if (definition == null)
 			return false;
-			
-		var chars = _controlsChars[input];
+		
+		var chars = definition.chars;
 		if (chars != null)
 		{
 			for (char in chars)
 			{
-				if (_pressedChars.indexOf(char) == -1)
-					return false;
+				// if key is pressed
+				if (_pressedChars.indexOf(char) != -1)
+					return true;
 			}
 		}
-		
-		var buttons = _controlsButtons[input];
+		var buttons = definition.buttons;
 		if (buttons != null)
 		{
 			for (button in buttons)
 			{
-				if (_pressedButtons.indexOf(button) == -1)
-					return false;
+				// if key is pressed
+				if (_pressedButtons.indexOf(button) != -1)
+					return true;
 			}
 		}
-		
-		var modifiers = _controlsModifiers[input];
+		var modifiers = definition.modifiers;
 		if (modifiers != null)
 		{
 			for (modifier in modifiers)
 			{
-				if (_pressedModifiers.indexOf(modifier) == -1)
-					return false;
+				// if key is pressed
+				if (_pressedModifiers.indexOf(modifier) != -1)
+					return true;
 			}
 		}
-		return true;
+		return false;
 	}
 	
 	/**
@@ -194,39 +196,41 @@ class Input //TODO: Fix pressed()
 	public static inline function released(input:String):Bool
 	{
 		// if Input doesn't exists return false
-		if (_controls[input] != true)
+		var definition = _definitions[input];
+		if (definition == null)
 			return false;
 		
-		var chars = _controlsChars[input];
+		var chars = definition.chars;
 		if (chars != null)
 		{
 			for (char in chars)
 			{
-				if (_releasedChars.indexOf(char) == -1)
-					return false;
+				// if key is pressed
+				if (_releasedChars.indexOf(char) != -1)
+					return true;
 			}
 		}
-		
-		var buttons = _controlsButtons[input];
+		var buttons = definition.buttons;
 		if (buttons != null)
 		{
 			for (button in buttons)
 			{
-				if (_pressedButtons.indexOf(button) == -1)
-					return false;
+				// if key is pressed
+				if (_releasedButtons.indexOf(button) != -1)
+					return true;
 			}
 		}
-		
-		var modifiers = _controlsModifiers[input];
+		var modifiers = definition.modifiers;
 		if (modifiers != null)
 		{
 			for (modifier in modifiers)
 			{
-				if (_releasedModifiers.indexOf(modifier) == -1)
-					return false;
+				// if key is pressed
+				if (_releasedModifiers.indexOf(modifier) != -1)
+					return true;
 			}
 		}
-		return true;
+		return false;
 	}
 	
 	public static inline function update()
@@ -254,7 +258,10 @@ class Input //TODO: Fix pressed()
 			{
 				var name:String = definition.name;
 				if (name == null)
+				{
 					trace("Input Definition is missing a name: " + definition);
+					continue;
+				}
 				var chars:Array<String> = definition.chars;
 				
 				var buttons:Array<Button> = [];
@@ -282,7 +289,7 @@ class Input //TODO: Fix pressed()
 				}
 					
 				if (chars != null || buttons != null || modifiers != null)
-					define(name, chars, buttons, modifiers);
+					define(name, chars, buttons, modifiers, definition.combination.parse(false));
 			}
 		}
 	}
@@ -357,19 +364,29 @@ class Input //TODO: Fix pressed()
 		mouseWheel = true;
 	}
 	
-	// if the Input exists
-	private static var _controls:Map<String, Bool> = new Map();
-	
-	// maps control name to keys/buttons
-	private static var _controlsChars:Map<String, Array<String>> = new Map();
-	private static var _controlsModifiers:Map<String, Array<Key>> = new Map();
-	private static var _controlsButtons:Map<String, Array<Button>> = new Map();
+	private static var _definitions:Map<String, InputDefinition> = new Map();
 	
 	private static var _pressedChars:Array<String> = [];
-	private static var _pressedModifiers:Array<Key> = [];
 	private static var _pressedButtons:Array<Button> = [];
+	private static var _pressedModifiers:Array<Key> = [];
 	
 	private static var _releasedChars:Array<String> = [];
-	private static var _releasedModifiers:Array<Key> = [];
 	private static var _releasedButtons:Array<Button> = [];
+	private static var _releasedModifiers:Array<Key> = [];
+}
+
+private class InputDefinition
+{
+	public var chars:Array<String>;
+	public var modifiers:Array<Key>;
+	public var buttons:Array<Button>;
+	public var combination:Bool;
+	
+	public function new(chars:Array<String>, buttons:Array<Button>, modifiers:Array<Key>, combination:Bool)
+	{
+		this.chars = chars;
+		this.buttons = buttons;
+		this.modifiers = modifiers;
+		this.combination = combination;
+	}
 }
