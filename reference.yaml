@@ -170,3 +170,4 @@ Input:
       name: quit
       chars: [e]
       modifiers: [ctrl]
+      combination: true

@@ -39,21 +39,24 @@ class Screen
 	
 	private static inline function set_scaleX(value:Float):Float
 	{
-		fullScaleX = value * scale;
-		return scaleX = value;
+		scaleX = value;
+		fullScaleX = scaleX * scale;
+		return scaleX;
 	}
 	
 	private static inline function set_scaleY(value:Float):Float
 	{
-		fullScaleY = value * scale;
-		return scaleY = value;
+		scaleY = value;
+		fullScaleY = scaleY * scale;
+		return scaleY;
 	}
 	
 	private static inline function set_scale(value:Float):Float
 	{
-		fullScaleX = scaleX * value;
-		fullScaleY = scaleY * value;
-		return scale = value;
+		scale = value;
+		fullScaleX = scaleX * scale;
+		fullScaleY = scaleY * scale;
+		return scale;
 	}
 	
 	private static inline function get_width():Int { return Misc.engine.width; }
