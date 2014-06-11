@@ -38,13 +38,12 @@ class Text extends Graphic
 	{
 		if (visible && font != null)
 		{
-			var _transform = transform;
 			Painter.set(color, alpha, font);
-			
-			if (Screen.camera != null)
-				Painter.drawString(text, _transform.x - Screen.camera.x, _transform.y - Screen.camera.y);
-			else
-				Painter.drawString(text, _transform.x, _transform.y);
+			for (camera in Screen.cameras)
+			{
+				Painter.camera = camera;
+				Painter.drawString(text, transform.x - Screen.camera.x, transform.y - Screen.camera.y);
+			}
 		}
 	}
 	

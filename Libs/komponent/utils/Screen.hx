@@ -10,14 +10,11 @@ class Screen
 {
 	public static var color:Null<Color>;
 	
+	// The first added camera.
 	public static var camera:Camera;
 	
-	public static var scaleX(default, set):Float = 1;
-	public static var scaleY(default, set):Float = 1;
-	public static var scale(default, set):Float = 1;
-	
-	public static var fullScaleX(default, null):Float = 1;
-	public static var fullScaleY(default, null):Float = 1;
+	// All cameras.
+	public static var cameras:Array<Camera> = [];
 	
 	public static var width(get, set):Int;
 	public static var height(get, set):Int;
@@ -29,34 +26,9 @@ class Screen
 	public static var top(get, never):Float;
 	public static var bottom(get, never):Float;
 	
-	public static function loadConfig(data:Dynamic):Void
+	public static inline function loadConfig(data:Dynamic)
 	{
-		color = data.color.parseColor(Color.White);
-		scaleX = data.scaleX.parse(1.0);
-		scaleY = data.scaleY.parse(1.0);
-		scale = data.zoom.parse(1.0);
-	}
-	
-	private static inline function set_scaleX(value:Float):Float
-	{
-		scaleX = value;
-		fullScaleX = scaleX * scale;
-		return scaleX;
-	}
-	
-	private static inline function set_scaleY(value:Float):Float
-	{
-		scaleY = value;
-		fullScaleY = scaleY * scale;
-		return scaleY;
-	}
-	
-	private static inline function set_scale(value:Float):Float
-	{
-		scale = value;
-		fullScaleX = scaleX * scale;
-		fullScaleY = scaleY * scale;
-		return scale;
+		color = data.parseColor(null);
 	}
 	
 	private static inline function get_width():Int { return Misc.engine.width; }

@@ -46,14 +46,14 @@ class Image extends Graphic
 	{	
 		if (visible && _image != null)
 		{
-			var _transform = transform;
-			
-			var useCamera:Bool = Screen.camera != null;
-		
 			Painter.set(color, alpha);
-			Painter.drawImage5(_image, _transform.x, _transform.y, _transform.khaRotation,
-								_transform.scaleX, _transform.scaleY, flipX, flipY, true,
-								useCamera, sourceRect, tiledWidth, tiledHeight, fillScreen);
+			for (camera in Screen.cameras)
+			{
+				Painter.camera = camera;
+				Painter.setScale(transform.scaleX, transform.scaleY);
+				Painter.drawImage5(_image, transform.x, transform.y, transform.khaRotation,
+									flipX, flipY, sourceRect, tiledWidth, tiledHeight, fillScreen);
+			}
 		}
 	}
 	

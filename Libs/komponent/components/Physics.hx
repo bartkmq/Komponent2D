@@ -64,11 +64,11 @@ class Physics extends Component
 		{
 			var _transform = transform;
 			Painter.set(Color.fromBytes(132, 31, 39), 1);
-			
-			if (Screen.camera != null)
-				Painter.drawPolygon(temporaryShape, -Screen.camera.x, -Screen.camera.y, Screen.fullScaleX, Screen.fullScaleY);
-			else
-				Painter.drawPolygon(temporaryShape);
+			for (camera in Screen.cameras)
+			{
+				Painter.camera = camera;
+				Painter.drawPolygon(temporaryShape, -Screen.camera.x, -Screen.camera.y);
+			}
 		}
 	}
 

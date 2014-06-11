@@ -35,13 +35,13 @@ class Hitbox extends Collider
 	override public function debugDraw():Void
 	{	
 		super.debugDraw();
-		var polygon:NapePolygon = cast shape;
-		Painter.set(Color.fromBytes(91, 194, 54), 1);
 		
-		if (Screen.camera != null)
-			Painter.drawPolygon(polygon, -Screen.camera.x, -Screen.camera.y, Screen.fullScaleX, Screen.fullScaleY);
-		else
-			Painter.drawPolygon(polygon);
+		Painter.set(Color.fromBytes(91, 194, 54), 1);
+		for (camera in Screen.cameras)
+		{
+			Painter.camera = camera;
+			Painter.drawPolygon(cast shape, -Screen.camera.x, -Screen.camera.y);
+		}
 	}
 	
 	public inline function setSize(width:Float, height:Float):Void

@@ -26,27 +26,24 @@ class Debug extends Component
 	
 	override public function debugDraw()
 	{
-		var _transform = transform;
-		var distance = Math.sqrt(Math.pow((_transform.x - Input.mouseX), 2) + Math.pow(_transform.y - Input.mouseY, 2));
+		var distance = Math.sqrt(Math.pow((transform.x - Input.mouseX), 2) + Math.pow(transform.y - Input.mouseY, 2));
 		if (distance < 20)
 		{
-			var _image = getComponent(Image);
+			var image = getComponent(Image);
 		
 			var width = 0;
-			if (_image != null)
-				width = _image.width;
+			if (image != null)
+				width = image.width;
 		
-			var x = _transform.x + width + 10;
-			var y = _transform.y;
-		
-			if (Screen.camera != null)
+			var x = transform.x + width + 10;
+			var y = transform.y;
+			
+			for (camera in Screen.cameras)
 			{
-				x -= Screen.camera.x;
-				y -= Screen.camera.y;
+				Painter.camera = camera;
+				Painter.set(Color.Black, 1, font);
+				Painter.drawString(gameObject.toString(), x - camera.x, y - camera.y);
 			}
-		
-			Painter.set(Color.Black, 1, font);
-			Painter.drawString(gameObject.toString(), x, y);
 		}
 	}
 	

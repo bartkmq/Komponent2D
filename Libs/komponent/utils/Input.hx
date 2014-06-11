@@ -262,6 +262,7 @@ class Input //TODO: Fix pressed()
 					trace("Input Definition is missing a name: " + definition);
 					continue;
 				}
+				
 				var chars:Array<String> = definition.chars;
 				
 				var buttons:Array<Button> = [];

@@ -40,11 +40,11 @@ class Collider extends Component
 	override public function debugDraw():Void
 	{
 		Painter.set(Color.fromBytes(91, 194, 54), 1); // green
-		
-		if (Screen.camera != null)
-			Painter.drawCross(shape.worldCOM.x - Screen.camera.x, shape.worldCOM.y - Screen.camera.y, 10 * Screen.fullScaleX, 10 * Screen.fullScaleY, 2);
-		else
+		for (camera in Screen.cameras)
+		{
+			Painter.camera = camera;
 			Painter.drawCross(shape.worldCOM.x, shape.worldCOM.y, 10, 10, 2);
+		}
 	}
 	
 	public inline function setCenter(x:Float, y:Float)

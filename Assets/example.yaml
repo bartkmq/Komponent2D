@@ -84,6 +84,7 @@ classes:
       file: ground
       tiledWidth: 700
       tiledHeight: 10
+      fillScreen: true
 
 &HUD HUD:
   name: HUD
@@ -128,3 +129,15 @@ Input:
     -
       name: debug
       chars: [d]
+    -
+      name: up
+      buttons: [up]
+    -
+      name: down
+      buttons: [down]
+    -
+      name: left
+      buttons: [left]
+    -
+      name: right
+      buttons: [right]

@@ -31,12 +31,13 @@ class Circle extends Collider
 	override public function debugDraw():Void
 	{
 		super.debugDraw();
-		Painter.set(Color.fromBytes(91, 194, 54), 1);
 		
-		if (Screen.camera != null)
-			Painter.drawCircle(shape.worldCOM.x - Screen.camera.x, shape.worldCOM.y - Screen.camera.y, radius * Screen.fullScaleX, Screen.fullScaleX, Screen.fullScaleY);
-		else
+		Painter.set(Color.fromBytes(91, 194, 54), 1);
+		for (camera in Screen.cameras)
+		{
+			Painter.camera = camera;
 			Painter.drawCircle(shape.worldCOM.x, shape.worldCOM.y, radius);
+		}
 	}
 	
 	public inline function setRadius(radius:Float):Void

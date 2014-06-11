@@ -62,11 +62,11 @@ class Transform extends Component
 	override public function debugDraw()
 	{
 		Painter.set(Color.fromBytes(0, 0, 255), 1);
-		
-		if (Screen.camera != null)
-			Painter.drawCross(x - Screen.camera.x, y - Screen.camera.y, 10 * Screen.fullScaleX, 10 * Screen.fullScaleY, 2);
-		else
+		for (camera in Screen.cameras)
+		{
+			Painter.camera = camera;
 			Painter.drawCross(x, y, 10, 10, 2);
+		}
 	}
 	
 	public inline function setPos(x:Float, y:Float):Void

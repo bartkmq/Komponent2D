@@ -13,6 +13,7 @@ import komponent.components.misc.Camera;
 import komponent.components.Transform;
 import komponent.utils.Time;
 import komponent.utils.Painter;
+import komponent.utils.Screen;
 
 class Nape extends Extension
 {
@@ -61,7 +62,7 @@ class Nape extends Extension
 	{
 		for (body in bodies)
 		{
-			Painter.set(Color.fromBytes(91, 194, 54), 1); // green
+			//Painter.set(Color.fromBytes(91, 194, 54), 1); // green
 			//Painter.drawCross(body.worldCOM.x, body.worldCOM.y, 10, 10, 2);
 		}
 	}
