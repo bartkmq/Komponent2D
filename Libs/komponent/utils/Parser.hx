@@ -45,7 +45,7 @@ class Parser
 		return defaultStyle;
 	}
 	
-	public static inline function parseColor(data:Dynamic, defaultColor:Color):Color
+	public static inline function parseColor(data:Dynamic, defaultColor:Null<Color>):Color
 	{
 		if (data != null)
 		{
@@ -79,17 +79,25 @@ class Parser
 	
 	public static inline function parseButton(data:Dynamic, defaultButton:Button):Button
 	{
-		return (data != null) ? cast Type.resolveEnum('kha.Button.${data.toUpperCase()}') : defaultButton;
+		return (data != null) ? Type.createEnum(Button, data.toUpperCase()) : defaultButton;
 	}
 	
 	public static inline function parseKey(data:Dynamic, defaultKey:Key):Key
 	{
-		return (data != null) ? cast Type.resolveEnum('kha.Key.${data.toUpperCase()}') : defaultKey;
+		return (data != null) ? Type.createEnum(Key, data.toUpperCase()) : defaultKey;
 	}
 	
 	public static inline function parseBodyType(data:Dynamic, defaultBodyType:BodyType):BodyType
 	{
-		return (data != null) ? cast Type.resolveEnum('nape.phys.BodyType.${data.toUpperCase()}') : defaultBodyType;
+		if (data != null)
+			switch (data.toUpperCase())
+			{
+				case "DYNAMIC": defaultBodyType = BodyType.DYNAMIC;
+				case "KINEMATIC": defaultBodyType = BodyType.KINEMATIC;
+				case "STATIC": defaultBodyType = BodyType.STATIC;
+				default: trace("Invalid BodyType: $data");
+			}
+		return defaultBodyType;
 	}
 	
 }
