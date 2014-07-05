@@ -6,18 +6,38 @@ import nape.geom.Vec2;
 abstract Point(Vec2) from Vec2 to Vec2
 {
 
-	public function new(x:Float = 0, y:Float = 0) 
+	public inline function new(x:Float = 0, y:Float = 0) 
 	{
 		this = new Vec2(x, y);
 	}
 	
-	public function distance(point:Point):Float
+	public inline function distance(point:Point):Float
 	{
 		return Math.sqrt(Math.pow(this.x - point.x, 2) + Math.pow(this.y - point.y, 2));
 	}
 	
+	public inline function setTo(point:Point):Void
+	{
+		this.set(point);
+	}
+	
+	public inline function setPos(x:Float, y:Float):Void
+	{
+		this.setxy(x, y);
+	}
+	
+	public inline function equals(point:Point):Bool
+	{
+		return equalPos(point.x, point.y);
+	}
+	
+	public inline function equalPos(x:Float, y:Float):Bool
+	{
+		return (this.x == x && this.y == y);
+	}
+	
 	@:op(A + B)
-	private function add(point:Point)
+	private inline function add(point:Point)
 	{
 		this.x += point.x;
 		this.y += point.y;
@@ -25,7 +45,7 @@ abstract Point(Vec2) from Vec2 to Vec2
 	}
 	
 	@:op(A - B)
-	private function sub(point:Point)
+	private inline function sub(point:Point)
 	{
 		this.x -= point.x;
 		this.y -= point.y;
@@ -33,7 +53,7 @@ abstract Point(Vec2) from Vec2 to Vec2
 	}
 	
 	@:op(A * B)
-	private function mul(point:Point)
+	private inline function mul(point:Point)
 	{
 		this.x *= point.x;
 		this.y *= point.y;
@@ -41,7 +61,7 @@ abstract Point(Vec2) from Vec2 to Vec2
 	}
 	
 	@:op(A / B)
-	private function div(point:Point)
+	private inline function div(point:Point)
 	{
 		this.x /= point.x;
 		this.y /= point.y;

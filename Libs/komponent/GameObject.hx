@@ -81,7 +81,7 @@ class GameObject
 	public function hasComponent<T:Component>(componentType:Class<T>):Bool
 	{	
 		if (Std.is(transform, componentType))
-			return cast transform;
+			return true;
 		for (component in components)
 		{
 			if (Std.is(component, componentType))

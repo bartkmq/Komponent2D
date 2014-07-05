@@ -27,7 +27,7 @@ class Collider extends Component
 	
 	public var body:Body;
 	public var shape:Shape;
-	public var material:Material;
+	public var material(get, set):Material;
 	
 	public var isTrigger(get, set):Bool;
 	
@@ -88,4 +88,7 @@ class Collider extends Component
 	
 	private inline function get_centerY():Float { return shape.localCOM.y; }
 	private inline function set_centerY(value:Float):Float { return shape.localCOM.y = value; }
+	
+	private inline function get_material():Material { return shape.material; }
+	private inline function set_material(value:Material):Material { return shape.material = value; }
 }

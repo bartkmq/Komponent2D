@@ -156,19 +156,16 @@ class Painter
 				tiledHeight = Std.int(tiledHeight * camera.fullScaleY);
 			}
 			
-			var n = 0;
 			while (ty < tiledHeight)
 			{
 				while (tx < tiledWidth)
 				{
 					Painter.drawImage2(image, sx, sy, dw, sh, x + tx, y + ty, dw, dh, rotation);
 					tx += dw;
-					n++;
 				}
 				tx = 0;
 				ty += dh;
 			}
-			trace(n);
 		}
 		else
 		{
