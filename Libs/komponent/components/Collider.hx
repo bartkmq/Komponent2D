@@ -15,10 +15,6 @@ import komponent.utils.Screen;
 
 using komponent.utils.Parser;
 
-typedef EnterCallback = Collider -> Collider -> Void;
-typedef ExitCallback = Collider -> Collider -> Void;
-typedef StayCallback = Collider -> Collider -> Void;
-
 class Collider extends Component
 {
 	

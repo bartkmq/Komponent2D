@@ -52,17 +52,16 @@ class Physics extends Component
 	override public function update():Void
 	{
 		checkTemporaryShape();
-		var _transform = transform;
-		_transform.x = body.position.x;
-		_transform.y = body.position.y;
-		_transform.rotation = body.rotation;
+		transform.x = body.position.x;
+		transform.y = body.position.y;
+		transform.rotation = body.rotation;
+		transform.ignoreParents = true;
 	}
 
 	override public function debugDraw():Void
 	{
 		if (temporaryShape != null)
 		{
-			var _transform = transform;
 			Painter.set(Color.fromBytes(132, 31, 39), 1);
 			for (camera in Screen.cameras)
 			{
@@ -99,8 +98,7 @@ class Physics extends Component
 		
 		if (body == null)
 		{
-			var _transform = transform;
-			body = new Body(BodyType.DYNAMIC, Vec2.weak(_transform.x, _transform.y));
+			body = new Body(BodyType.DYNAMIC, Vec2.weak(transform.x, transform.y));
 			body.space = nape.space;
 			nape.bodies[gameObject] = body;
 		}

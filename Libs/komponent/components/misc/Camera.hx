@@ -22,7 +22,7 @@ class Camera extends Component
 	override public function added()
 	{
 		if (Screen.camera != null)
-			trace("Only one Camera is supported.");
+			trace("Only one Camera is currently supported.");
 		else
 		{
 			Screen.camera = this;
@@ -46,10 +46,10 @@ class Camera extends Component
 	}
 	
 	private inline function get_x():Float { return _transform.x; }
-	private inline function set_x(value:Float):Float { return _transform.x = value; }
+	private inline function set_x(value:Float):Float { return _transform.localX = value; }
 	
 	private inline function get_y():Float { return _transform.y; }
-	private inline function set_y(value:Float):Float { return _transform.y = value; }
+	private inline function set_y(value:Float):Float { return _transform.localY = value; }
 	
 	private inline function set_scaleX(value:Float):Float
 	{
