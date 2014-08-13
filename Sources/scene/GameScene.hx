@@ -1,19 +1,19 @@
 package scene;
 
 import kha.Button;
-import kha.Loader;
-
-import komponent.components.graphic.Animation;
+import kha.Key;
 
 import komponent.GameObject;
 import komponent.Scene;
-import komponent.utils.Input;
+import komponent.input.Keyboard;
+import komponent.input.Mouse;
 import komponent.utils.Screen;
-import komponent.extension.Nape;
 import komponent.components.misc.Camera;
+import komponent.components.graphic.Image;
+import komponent.components.misc.Debug;
+import komponent.components.physics.Hitbox;
 
-import yaml.Parser;
-import yaml.Yaml;
+import components.FollowMouse;
 
 class GameScene extends Scene
 {
@@ -22,41 +22,51 @@ class GameScene extends Scene
 
 	override public function begin()
 	{
-		var configData = Loader.the.getBlob("example").toString();
-		config = Yaml.parse(configData, Parser.options().useObjects());
+		//var configData = Loader.the.getBlob("example").toString();
+		//config = Yaml.parse(configData, Parser.options().useObjects());
 		
-		//engine.debug = false;
-		getExtension(Nape).setGravity(0, 30);
-		
-		Input.loadConfig(config.Input);
-		Screen.loadConfig(config.Screen);
-		
-		GameObject.loadPrefab(config.Wabbit);
-		GameObject.loadPrefab(config.Coin);
-		GameObject.loadPrefab(config.Ground);
-		GameObject.loadPrefab(config.HUD);
+		engine.debug = true;
 		
 		new GameObject("Camera", 0, 0).addComponent(Camera);
+		
+		Keyboard.define("restart", ["r"]);
+		Keyboard.define("debug", ["d"]);
+		
+		Keyboard.define("up", [Key.UP]);
+		Keyboard.define("down", [Key.DOWN]);
+		Keyboard.define("left", [Key.LEFT]);
+		Keyboard.define("right", [Key.RIGHT]);
+		
+		var wabbit = new GameObject("Wabbit", 50, 50);
+		wabbit.addComponent(Image).load("wabbit");
+		wabbit.addComponent(Debug);
+		//wabbit.addComponent(FollowMouse);
+		
+		var ground = new GameObject("Ground", Screen.left, Screen.bottom - 10);
+		ground.addComponent(Hitbox).setSize(Screen.width, 10);
+		ground.addComponent(Debug);
 	}
 	
 	override public function update()
 	{
-		if (Input.check("restart"))
+		super.update();
+		
+		if (Keyboard.check("restart"))
 			engine.currentScene = new GameScene();
-		if (Input.check("debug"))
+		if (Keyboard.check("debug"))
 			engine.debug = !engine.debug;
 			
-		if (Input.check("up"))
+		if (Keyboard.check("up"))
 			Screen.camera.y -= 5;
-		else if (Input.check("down"))
+		else if (Keyboard.check("down"))
 			Screen.camera.y += 5;
-		else if (Input.check("left"))
+		else if (Keyboard.check("left"))
 			Screen.camera.x -= 5;
-		else if (Input.check("right"))
+		else if (Keyboard.check("right"))
 			Screen.camera.x += 5;
 			
-		if (Input.mouseWheel)
-			Screen.camera.zoom += Input.mouseWheelDelta * 0.01;
+		if (Mouse.wheel)
+			Screen.camera.zoom += Mouse.wheelDelta * 0.01;
 	}
 	
 }
