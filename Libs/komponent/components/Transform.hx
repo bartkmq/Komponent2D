@@ -3,60 +3,95 @@ package komponent.components;
 import kha.Color;
 import kha.math.Vector2;
 import kha.Rotation;
-import komponent.GameObject;
 
 import komponent.utils.Painter;
 import komponent.utils.Screen;
+import komponent.ds.Signal;
+import komponent.GameObject;
 
 using komponent.utils.Parser;
 
+@:allow(komponent.components.Physics)
 class Transform extends Component
 {
-	// in world space
-	public var x:Float;
-	public var y:Float;
+	/**
+	 * The following variables represent the GameObjects Transformations in world space.
+	 */
+	public var x(default, null):Float;
+	public var y(default, null):Float;
 	
-	// in local space, offset from the parent
-	public var localX:Float;
-	public var localY:Float;
+	public var rotation(default, null):Float;
 	
-	public var rotation(get, set):Float;
+	public var scaleX(default, null):Float;
+	public var scaleY(default, null):Float;
 	
-	public var centerX(get, set):Float;
-	public var centerY(get, set):Float;
+	/**
+	 * Variables starting with "local" are the offset of this Transform to it's parent.
+	 * If this Transform has no parent the variables equal the ones in world space
+	 */
+	public var localX(default, set):Float;
+	public var localY(default, set):Float;
 	
-	public var scaleX:Float;
-	public var scaleY:Float;
+	public var localRotation(default, set):Float;
 	
-	public var parent:Transform;
+	public var localScaleX(default, set):Float;
+	public var localScaleY(default, set):Float;
+	
+	/**
+	 * The parent Transform of this Transform.
+	 */
+	public var parent(default, set):Transform;
+	
+	/**
+	 * All Children of this GameObject.
+	 */
 	public var children:Array<Transform>;
+	
+	/**
+	 * The top most entity in the hierarchy.
+	 */
 	public var root(get, never):Transform;
 	
-	public var khaRotation:Rotation;
-
+	// If the Transform was modified and needs to be updated
+	private var modified(default, set):Bool;
+	// If the Transform should ignored his parents, used by Physics.
+	private var ignoreParents:Bool;
+	
 	private function new() 
 	{
-		x = 0;
-		y = 0;
+		children = [];
+		reset();
 		
-		khaRotation = new Rotation(new Vector2(), 0);
+		localX = 0;
+		localY = 0;
 		
-		scaleX = 1;
-		scaleY = 1;
+		localRotation = 0;
+		
+		localScaleX = 1;
+		localScaleY = 1;
+		
+		modified = false;
+		ignoreParents = false;
 	}
 	
 	override public function update()
 	{
-		/*
-		if (attachedTransform != null)
+		if (modified && !ignoreParents)
 		{
-			x = attachedTransform.x;
-			y = attachedTransform.y;
-			rotation = attachedTransform.rotation;
-			scaleX = attachedTransform.scaleX;
-			scaleY = attachedTransform.scaleY;
+			reset();
+			var current:Transform = this;
+			while (current != null)
+			{
+				x += current.localX;
+				y += current.localY;
+				rotation += current.localRotation;
+				scaleX *= current.localScaleX;
+				scaleY *= current.localScaleY;
+				
+				current = current.parent;
+			}
 		}
-		*/
+		modified = false;
 	}
 	
 	override public function debugDraw()
@@ -71,10 +106,14 @@ class Transform extends Component
 	
 	public inline function setPos(x:Float, y:Float):Void
 	{
-		this.x = x;
-		this.y = y;
+		this.localX = x;
+		this.localY = y;
 	}
 	
+	/**
+	 * Makes this Transform to the child of another GameObject.
+	 * @param	otherGameObject
+	 */
 	public inline function attachTo(otherGameObject:GameObject):Void
 	{
 		if (gameObject != null)
@@ -83,36 +122,57 @@ class Transform extends Component
 		}
 	}
 	
+	/**
+	 * Attaches another GameObject as child.
+	 * @param	otherGameObject
+	 */
 	public inline function attach(otherGameObject:GameObject):Void
 	{
 		children.push(otherGameObject.transform);
 		otherGameObject.transform.parent = this;
 	}
 	
+	/**
+	 * Removes another GameObject.
+	 * @param	otherGameObject
+	 */
 	public inline function detach(otherGameObject:GameObject)
 	{
 		children.remove(otherGameObject.transform);
 		otherGameObject.transform.parent = null;
 	}
 	
+	public inline function reset()
+	{
+		x = 0;
+		y = 0;
+		rotation = 0;
+		scaleX = 1;
+		scaleY = 1;
+	}
+	
+	/**
+	 * Calculates the distance between this Transform and a point.
+	 * @param	x
+	 * @param	y
+	 * @return distance in px
+	 */
+	public inline function distanceTo(x:Float, y:Float):Float
+	{
+		return Math.sqrt(Math.pow(this.x - x, 2) + Math.pow(this.y - y, 2));
+	}
+	
 	override public function loadConfig(data:Dynamic):Void
 	{
-		khaRotation = new Rotation(new Vector2(data.centerX.parse(0.0), data.centerY.parse(0.0)), data.rotation.parse(0.0));
+		localRotation = data.rotation.parse(0.0);
+		localX = data.centerX.parse(0.0);
+		localY = data.centerY.parse(0.0);
+		localScaleX = data.scaleX.parse(1.0);
+		localScaleY = data.scaleY.parse(1.0);
 		
 		x = data.x.parse(0.0);
 		y = data.y.parse(0.0);
-		scaleX = data.scaleX.parse(1.0);
-		scaleY = data.scaleY.parse(1.0);
 	}
-	
-	private inline function get_rotation():Float { return khaRotation.angle; }
-	private inline function set_rotation(value:Float):Float { return khaRotation.angle = value; }
-	
-	private inline function get_centerX():Float { return khaRotation.center.x; }
-	private inline function set_centerX(value:Float):Float { return khaRotation.center.x = value; }
-	
-	private inline function get_centerY():Float { return khaRotation.center.y; }
-	private inline function set_centerY(value:Float):Float { return khaRotation.center.y = value; }
 	
 	private inline function get_root():Transform
 	{
@@ -123,4 +183,29 @@ class Transform extends Component
 		}
 		return transform;
 	}
+	
+	private inline function set_modified(value:Bool)
+	{
+		if (value)
+		{
+			for (child in children)
+				child.modified = true;
+		}
+		return modified = value;
+	}
+	
+	private inline function set_parent(value:Transform) { modified = true; return parent = value; }
+	private inline function set_parent(value:Transform)
+	{
+		modified = true;
+		return parent = value;
+	}
+	
+	private inline function set_localX(value:Float):Float { modified = true; return localX = value; }
+	private inline function set_localY(value:Float):Float { modified = true; return localY = value; }
+	
+	private inline function set_localRotation(value:Float):Float { modified = true; return localRotation = value; }
+	
+	private inline function set_localScaleX(value:Float):Float { modified = true; return localScaleX = value; }
+	private inline function set_localScaleY(value:Float):Float { modified = true; return localScaleY = value; }
 }
