@@ -89,7 +89,7 @@ class Painter
 		}
 	}
 	
-	public static inline function drawImage5(image:Image, x:Float, y:Float,rotation:Rotation, flipX:Bool = false, flipY:Bool = false, sourceRect:Rectangle = null, tiledWidth:Int = 0, tiledHeight:Int = 0, fillScreen:Bool = false):Void
+	public static inline function drawImage5(image:Image, x:Float, y:Float, rotation:Float, centerX:Float, centerY:Float, flipX:Bool = false, flipY:Bool = false, sourceRect:Rectangle = null, tiledWidth:Int = 0, tiledHeight:Int = 0, fillScreen:Bool = false):Void
 	{
 		var sx:Float, sy:Float, sw:Float, sh:Float, dw:Float, dh:Float;
 		
@@ -160,7 +160,7 @@ class Painter
 			{
 				while (tx < tiledWidth)
 				{
-					Painter.drawImage2(image, sx, sy, dw, sh, x + tx, y + ty, dw, dh, rotation);
+					Painter.drawImage2(image, sx, sy, dw, sh, x + tx, y + ty, dw, dh, rotation, centerX, centerY);
 					tx += dw;
 				}
 				tx = 0;
@@ -169,7 +169,7 @@ class Painter
 		}
 		else
 		{
-			drawImage2(image, sx, sy, sw, sh, x, y, dw, dh, rotation);
+			drawImage2(image, sx, sy, sw, sh, x, y, dw, dh, rotation, centerX, centerY);
 		}
 	}
 	
@@ -329,8 +329,8 @@ class Painter
 		// use average scale
 		strength *= (camera.fullScaleX + camera.fullScaleY) / 2;
 		
-		x = (x - Screen.halfWidth) * camera.fullScaleX + Screen.halfWidth;
-		y = (y - Screen.halfHeight) * camera.fullScaleY + Screen.halfHeight;
+		x = (x - Painter.camera.x - Screen.halfWidth) * camera.fullScaleX + Screen.halfWidth;
+		y = (y - Painter.camera.y - Screen.halfHeight) * camera.fullScaleY + Screen.halfHeight;
 		
 		x -= width / 2;
 		y -= height / 2;
@@ -368,7 +368,7 @@ class Painter
 	private static inline function set_font(value:Font) { painter.setFont(value); return value; }
 	
 	private static inline function drawImage(image: Image, x: Float, y: Float) { painter.drawImage(image, x, y); }
-	private static inline function drawImage2(image: Image, sx: Float, sy: Float, sw: Float, sh: Float, dx: Float, dy: Float, dw: Float, dh: Float, rotation: Rotation = null) { painter.drawImage2(image, sx, sy, sw, sh, dx, dy, dw, dh, rotation); }
+	private static inline function drawImage2(image: Image, sx: Float, sy: Float, sw: Float, sh: Float, dx: Float, dy: Float, dw: Float, dh: Float, ?angle, ?ox, ?oy) { painter.drawImage2(image, sx, sy, sw, sh, dx, dy, dw, dh, angle, ox, oy); }
 	private static inline function drawRect(x: Float, y: Float, width: Float, height: Float, strength: Float = 1.0) { painter.drawRect(x, y, width, height, strength); }
 	private static inline function fillRect(x: Float, y: Float, width: Float, height: Float) { painter.fillRect(x, y, width, height); }
 	private static inline function drawChars(text: String, offset: Int, length: Int, x: Float, y: Float) { painter.drawChars(text, offset, length, x, y); }
