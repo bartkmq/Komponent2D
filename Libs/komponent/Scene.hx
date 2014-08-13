@@ -91,13 +91,6 @@ class Scene
 			Painter.color = Screen.color;
 			Painter.clear();
 		}
-		/*
-		for (gameObject in gameObjects)
-		{
-			if (gameObject.active)
-				gameObject.render();
-		}
-		*/
 		for (graphic in graphics)
 		{
 			if (graphic.visible && graphic.gameObject.active)
@@ -108,6 +101,11 @@ class Scene
 			extension.render();
 			if (engine.debug)
 				extension.debugDraw();
+		}
+		for (gameObject in gameObjects)
+		{
+			if (gameObject.active)
+				gameObject.debugDraw();
 		}
 	}
 	

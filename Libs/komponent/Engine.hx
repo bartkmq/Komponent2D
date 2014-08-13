@@ -11,15 +11,16 @@ import kha.Game;
 import kha.Loader;
 import kha.LoadingScreen;
 import kha.Scheduler;
-import kha.Button;
-import kha.Key;
 
 import komponent.extension.Nape;
 import komponent.utils.Misc;
 import komponent.utils.Time;
 import komponent.utils.Painter;
 import komponent.utils.Screen;
-import komponent.utils.Input;
+import komponent.input.Keyboard;
+import komponent.input.Mouse;
+import komponent.input.Gamepad;
+import komponent.input.Touch;
 
 using komponent.utils.Misc;
 
@@ -98,6 +99,11 @@ class Engine extends Game
 	{
 		Misc.engine = this;
 		
+		// init Input
+		Keyboard.init();
+		Mouse.init();
+		Touch.init();
+		
 		if (_config != null)
 		{
 			config = Yaml.parse(Loader.the.getBlob(_config).toString(), Parser.options().useObjects());
@@ -121,7 +127,12 @@ class Engine extends Game
 	{
 		Time.start("updating");
 		currentScene.update();
-		Input.update();
+		
+		Keyboard.update();
+		Mouse.update();
+		Gamepad.update();
+		Touch.update();
+		
 		Time.frames++;
 		Time.stop("updating");
 	}
@@ -147,19 +158,6 @@ class Engine extends Game
 		engine._config = configfile;
 		return engine;
 	}
-	
-	override public function buttonDown(button:Button):Void { Input.onButtonDown(button); }
-	override public function buttonUp(button:Button):Void { Input.onButtonUp(button); }
-	
-	override public function keyDown(key:Key, char:String):Void { Input.onKeyDown(key, char); }
-	override public function keyUp(key:Key, char:String):Void { Input.onKeyUp(key, char); }
-	
-	override public function mouseDown(x:Int, y:Int):Void { Input.onMouseDown(x, y); }
-	override public function mouseUp(x:Int, y:Int):Void { Input.onMouseUp(x, y); }
-	override public function rightMouseDown(x:Int, y:Int):Void { Input.onRightMouseDown(x, y); }
-	override public function rightMouseUp(x:Int, y:Int):Void { Input.onRightMouseUp(x, y); }
-	override public function mouseMove(x:Int, y:Int):Void { Input.onMouseMove(x, y); }
-	override public function mouseWheel(delta:Int):Void { Input.onMouseWheel(delta); }
 	
 	private inline function set_currentScene(value:Scene):Scene
 	{

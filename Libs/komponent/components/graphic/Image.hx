@@ -20,13 +20,29 @@ class Image extends Graphic
 	public var alpha:Float;
 	public var color:Color;
 	
+	/**
+	 * If the image should be flipped horizontally or vertically.
+	 */
 	public var flipX:Bool;
 	public var flipY:Bool;
 	
+	/**
+	 * If one of these values is higher than the images width/height
+	 * the image will be tiled (repeated) to match the specified size.
+	 */
 	public var tiledWidth:Int;
 	public var tiledHeight:Int;
+	
+	/**
+	 * If the image should be repeated to fill the whole screen.
+	 * Overwrites tiledWidth/tiledHeight.
+	 */
 	public var fillScreen:Bool;
 	
+	/**
+	 * Defines wich area of the source image should be displayed.
+	 * If null (default) the whole image will be displayed.
+	 */
 	public var sourceRect:Rectangle;
 	
 	private var _image:KhaImage;
@@ -49,9 +65,10 @@ class Image extends Graphic
 			Painter.set(color, alpha);
 			for (camera in Screen.cameras)
 			{
+				
 				Painter.camera = camera;
-				Painter.setScale(transform.scaleX, transform.scaleY);
-				Painter.drawImage5(_image, transform.x, transform.y, transform.khaRotation,
+				Painter.setScale(transform.localScaleX, transform.localScaleY);
+				Painter.drawImage5(_image, transform.x, transform.y, transform.rotation, 0, 0,
 									flipX, flipY, sourceRect, tiledWidth, tiledHeight, fillScreen);
 			}
 		}
@@ -64,7 +81,17 @@ class Image extends Graphic
 	
 	public inline function setSourceRectangle(x:Float, y:Float, width:Float, height:Float)
 	{
-		sourceRect = new Rectangle(x, y, width, height);
+		if (sourceRect == null)
+		{
+			sourceRect = new Rectangle(x, y, width, height);
+		}
+		else
+		{
+			sourceRect.x = x;
+			sourceRect.y = y;
+			sourceRect.width = width;
+			sourceRect.height = height;
+		}
 	}
 	
 	public inline function setTiledSize(tiledWidth:Int, tiledHeight:Int):Void
