@@ -2,7 +2,7 @@ package komponent.components.navigation;
 
 import komponent.Component;
 import komponent.GameObject;
-import komponent.utils.Point;
+import komponent.ds.Point;
 import komponent.components.Physics;
 import komponent.extension.Nape;
 
