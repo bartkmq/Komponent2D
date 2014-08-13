@@ -17,13 +17,13 @@ class GameObject
 	* Every GameObject has a Transform Component.
 	* 
 	* Dispatches:
-	* -> onComponentAdded(component) when a Component is added to this GameObject
-	* -> onComponentRemoved(component) when a Component is removed from this GameObject
-	* -> onActivated() when this GameObject starts to update/render (again)
-	* -> onDeactivated() when this GameObject is disabled and won't update/render anymore till activated again
+	* -> onComponentAdded(component) when a Component is added to this GameObject.
+	* -> onComponentRemoved(component) when a Component is removed from this GameObject.
+	* -> onActivated() when this GameObject starts to update/render again.
+	* -> onDeactivated() when this GameObject is disabled and won't update/render anymore till activated again.
 	*/
 	
-	public var transform(default, null):Transform;
+	public var transform(get, never):Transform;
 	public var graphic(get, never):Graphic;
 	public var collider(get, never):Collider;
 	
@@ -46,25 +46,16 @@ class GameObject
 		components = [];
 		Misc.engine.currentScene.add(this);
 		
-		transform = addComponent(Transform);
+		addComponent(Transform);
 		transform.setPos(x, y);
 	}
 	
 	public inline function update()
 	{
-		if (active)
-		{
-			for (component in components)
-			{
-				component.update();
-			}
-		}
-	}
-	
-	public inline function render()
-	{
 		for (component in components)
-			component.render();
+		{
+			component.update();
+		}
 	}
 	
 	public inline function debugDraw()
@@ -79,9 +70,7 @@ class GameObject
 	 * @return	True if a matching component was found, or false if none was found.
 	 */
 	public function hasComponent<T:Component>(componentType:Class<T>):Bool
-	{	
-		if (Std.is(transform, componentType))
-			return true;
+	{
 		for (component in components)
 		{
 			if (Std.is(component, componentType))
@@ -97,8 +86,6 @@ class GameObject
 	 */
 	public function getComponent<T:Component>(componentType:Class<T>):T
 	{
-		if (Std.is(transform, componentType))
-			return cast transform;
 		for (component in components)
 		{
 			if (Std.is(component, componentType))
@@ -113,17 +100,15 @@ class GameObject
 	 * @return	The added component instance or null.
 	 */
 	public inline function addComponent<T:Component>(componentType:Class<T>):T
-	{	
-		//if (!hasComponent(componentType)) TODO: Fix Subclasses
-		//{
+	{
+		if (Std.is(componentType, Transform))
+			return null;
 		var component = Type.createInstance(componentType, []);
 		components.push(component);
 		component.gameObject = this;
 		component.added();
 		sendMessage("onComponentAdded", component);
 		return component;
-		//}
-		//return null;
 	}
 	
 	/**
@@ -133,9 +118,11 @@ class GameObject
 	 */
 	public inline function removeComponent<T:Component>(component:T):T
 	{
-		for (localComponent in components)
+		// ignore Transform on index 0
+		var i:Int = 1;
+		while (i < components.length)
 		{
-			if (localComponent == component)
+			if (components[i] == component)
 			{
 				components.remove(component);
 				component.removed();
@@ -164,8 +151,8 @@ class GameObject
 	public inline function toString():String
 	{
 		var string = 'GameObject:$name[';
-		string += transform;
-		for (i in 0...components.length)
+		string += components[0];
+		for (i in 1...components.length)
 		{
 			string += ", ";
 			string += components[i];
@@ -207,7 +194,7 @@ class GameObject
 			{
 				component.added();
 				component.loadConfig(componentData);
-				object.transform = cast component;
+				object.components[0] = component;
 			}
 			else
 			{
@@ -217,7 +204,7 @@ class GameObject
 		}
 		
 		if (!object.hasComponent(Transform))
-			object.transform = new Transform();
+			object.components[0] = new Transform();
 		
 		for (i in 0...tempComponents.length)
 		{
@@ -243,7 +230,7 @@ class GameObject
 		return value;
 	}
 	
+	private inline function get_transform():Transform { return cast components[0]; }
 	private inline function get_graphic():Graphic { return getComponent(Graphic); }
-	
 	private inline function get_collider():Collider { return getComponent(Collider); }
 }
