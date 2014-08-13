@@ -31,12 +31,7 @@ class Component
 	public function update():Void { }
 	
 	/**
-	* Called when this component should render.
-	*/
-	public function render():Void { }
-	
-	/**
-	* Called after render() when debugging.
+	* Called after graphics are rendered when debugging.
 	*/
 	public function debugDraw():Void { }
 	
