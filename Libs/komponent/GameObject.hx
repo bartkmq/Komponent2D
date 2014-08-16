@@ -1,5 +1,7 @@
 package komponent;
 
+import haxe.rtti.Meta;
+
 import komponent.components.Transform;
 import komponent.components.Graphic;
 import komponent.components.Collider;
@@ -104,6 +106,19 @@ class GameObject
 		if (Std.is(componentType, Transform))
 			return null;
 		var component = Type.createInstance(componentType, []);
+		
+		// add components required by the new component
+		var reqComponents:Array<String> = cast Meta.getType(componentType).require;
+		if (reqComponents != null)
+		{
+			for (reqComponent in reqComponents)
+			{
+				var reqComponentType:Class<Dynamic> = Type.resolveClass(reqComponent);
+				if (!hasComponent(reqComponentType))
+					addComponent(reqComponentType);
+			}
+		}
+		
 		components.push(component);
 		component.gameObject = this;
 		component.added();
