@@ -1,13 +1,10 @@
 package komponent.components;
 
 import kha.Color;
-import kha.math.Vector2;
-import kha.Rotation;
 
+import komponent.GameObject;
 import komponent.utils.Painter;
 import komponent.utils.Screen;
-import komponent.ds.Signal;
-import komponent.GameObject;
 
 using komponent.utils.Parser;
 
@@ -52,46 +49,11 @@ class Transform extends Component
 	 */
 	public var root(get, never):Transform;
 	
-	// If the Transform was modified and needs to be updated
-	private var modified(default, set):Bool;
-	// If the Transform should ignored his parents, used by Physics.
-	private var ignoreParents:Bool;
-	
 	private function new() 
 	{
 		children = [];
+		resetWorld();
 		reset();
-		
-		localX = 0;
-		localY = 0;
-		
-		localRotation = 0;
-		
-		localScaleX = 1;
-		localScaleY = 1;
-		
-		modified = false;
-		ignoreParents = false;
-	}
-	
-	override public function update()
-	{
-		if (modified && !ignoreParents)
-		{
-			reset();
-			var current:Transform = this;
-			while (current != null)
-			{
-				x += current.localX;
-				y += current.localY;
-				rotation += current.localRotation;
-				scaleX *= current.localScaleX;
-				scaleY *= current.localScaleY;
-				
-				current = current.parent;
-			}
-		}
-		modified = false;
 	}
 	
 	override public function debugDraw()
@@ -142,15 +104,6 @@ class Transform extends Component
 		otherGameObject.transform.parent = null;
 	}
 	
-	public inline function reset()
-	{
-		x = 0;
-		y = 0;
-		rotation = 0;
-		scaleX = 1;
-		scaleY = 1;
-	}
-	
 	/**
 	 * Calculates the distance between this Transform and a point.
 	 * @param	x
@@ -160,6 +113,46 @@ class Transform extends Component
 	public inline function distanceTo(x:Float, y:Float):Float
 	{
 		return Math.sqrt(Math.pow(this.x - x, 2) + Math.pow(this.y - y, 2));
+	}
+	
+	/**
+	 * Resets the local transformations of this Transform.
+	 */
+	public inline function reset()
+	{
+		localX = 0;
+		localY = 0;
+		localRotation = 0;
+		localScaleX = 1;
+		localScaleY = 1;
+	}
+	
+	private function updateWorldTransformation()
+	{
+		resetWorld();
+		var current:Transform = this;
+		while (current != null)
+		{
+			x += current.localX;
+			y += current.localY;
+			rotation += current.localRotation;
+			scaleX *= current.localScaleX;
+			scaleY *= current.localScaleY;
+			
+			current = current.parent;
+		}
+		
+		for (child in children)
+			child.updateWorldTransformation();
+	}
+	
+	private inline function resetWorld()
+	{
+		x = 0;
+		y = 0;
+		rotation = 0;
+		scaleX = 1;
+		scaleY = 1;
 	}
 	
 	override public function loadConfig(data:Dynamic):Void
@@ -184,28 +177,13 @@ class Transform extends Component
 		return transform;
 	}
 	
-	private inline function set_modified(value:Bool)
-	{
-		if (value)
-		{
-			for (child in children)
-				child.modified = true;
-		}
-		return modified = value;
-	}
+	private inline function set_parent(value:Transform) { parent = value; updateWorldTransformation(); return value; }
 	
-	private inline function set_parent(value:Transform) { modified = true; return parent = value; }
-	private inline function set_parent(value:Transform)
-	{
-		modified = true;
-		return parent = value;
-	}
+	private inline function set_localX(value:Float):Float { localX = value; updateWorldTransformation(); return value; }
+	private inline function set_localY(value:Float):Float { localY = value; updateWorldTransformation(); return value; }
 	
-	private inline function set_localX(value:Float):Float { modified = true; return localX = value; }
-	private inline function set_localY(value:Float):Float { modified = true; return localY = value; }
+	private inline function set_localRotation(value:Float):Float { localRotation = value; updateWorldTransformation(); return value; }
 	
-	private inline function set_localRotation(value:Float):Float { modified = true; return localRotation = value; }
-	
-	private inline function set_localScaleX(value:Float):Float { modified = true; return localScaleX = value; }
-	private inline function set_localScaleY(value:Float):Float { modified = true; return localScaleY = value; }
+	private inline function set_localScaleX(value:Float):Float { localScaleX = value; updateWorldTransformation(); return value; }
+	private inline function set_localScaleY(value:Float):Float { localScaleY = value; updateWorldTransformation(); return value; }
 }

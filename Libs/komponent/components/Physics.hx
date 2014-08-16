@@ -55,7 +55,6 @@ class Physics extends Component
 		transform.x = body.position.x;
 		transform.y = body.position.y;
 		transform.rotation = body.rotation;
-		transform.ignoreParents = true;
 	}
 
 	override public function debugDraw():Void
