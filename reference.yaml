@@ -83,6 +83,9 @@ GameObject:
 
     -
       type: *Camera
+        scaleX: 1.0
+        scaleY: 1.0
+        zoom: 1.0
 
     -
       type: *Debug
@@ -150,16 +153,12 @@ GameObject:
 
 Screen:
   color: #FFFFFFFF
-  scaleX: 1.0
-  scaleY: 1.0
-  zoom: 1.0
 
-Input:
+Keyboard:
   definitions:
     -
       name: allKeys
       chars: [a, b, c, z] # alphabet
-      buttons: [up, right, down, left, button1, button2] # Arrow keys and joypad
       # Modifier keys and numpad arrow keys
       modifiers: [backspace, tab, enter, shift, ctrl, alt, esc, del, up, down, left, right]
     -

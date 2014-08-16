@@ -3,23 +3,20 @@ package komponent.ds;
 using komponent.utils.Misc;
 
 /**
- * A Signal<M, R> can bind one or more callback functions that will be
- * called with messages of type M and return type R.
- *
+ * A Signal<M> can bind one or more callback functions that will be
+ * called with messages of type M.
  * Typically M is some type of event that will be passed to the callback.
- * R can be Void or some value that needs to be returned to the handler
- * (e.g. a Bool value specifying whether a collision took place.)
  */ 
-class Signal<M, R>
+class Signal<M>
 {
-	public var callbacks:Array<(M->R)>;
+	public var callbacks:Array<(M->Void)>;
 
 	public function new()
 	{
 		callbacks = [];
 	}
 
-	public function add(callback:M->R)
+	public function add(callback:M->Void)
 	{
 		// add callback if it's not already added
 		if (callbacks.indexOf(callback) == -1)
@@ -28,7 +25,7 @@ class Signal<M, R>
 		}
 	}
 
-	public function remove(callback:M->R)
+	public function remove(callback:M->Void)
 	{
 		callbacks.remove(callback);
 	}
@@ -38,8 +35,8 @@ class Signal<M, R>
 		callbacks.clear();
 	}
 
-	public function dispatch(message:M):Array<R>
+	public function dispatch(message:M)
 	{
-		return [for (callback in callbacks) callback(message)];
+		for (callback in callbacks) callback(message);
 	}
 }

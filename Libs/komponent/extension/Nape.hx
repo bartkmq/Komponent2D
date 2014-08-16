@@ -23,7 +23,6 @@ class Nape extends Extension
 	public var positionIterations:Int;
 	
 	public var bodies:Map<GameObject, Body>;
-	//public var painterDebug:PainterDebug;
 	
 	public var active:Bool;
 	
@@ -34,8 +33,6 @@ class Nape extends Extension
 		velocityIterations = 10;
 		positionIterations = 10;
 		bodies = new Map();
-		
-		//painterDebug = new PainterDebug();
 	}
 	
 	override public function update():Void

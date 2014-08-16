@@ -18,7 +18,6 @@ class Keyboard //TODO: Fix pressed()
 	 * Defines a new input.
 	 * @param	name		String to map the input to.
 	 * @param	chars		The keys to use for the Input.
-	 * @param	buttons		The buttons to use for the Input.
 	 * @param	modifiers	The modifiers to use for the Input.
 	 * @param	combination	If this Input defintion requires all keys to be pressed.
 	 */

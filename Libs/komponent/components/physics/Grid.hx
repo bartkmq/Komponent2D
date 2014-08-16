@@ -10,6 +10,7 @@ class Grid extends Collider
 {
 	
 	// row = tilesY
+	// column = tilesX
 	
 	public var tileWidth(default, null):Int;
 	public var tileHeight(default, null):Int;
@@ -17,7 +18,7 @@ class Grid extends Collider
 	public var tilesX(default, null):Int;
 	public var tilesY(default, null):Int;
 	
-	private var shapes:Array<Shape>;
+	private var shapes:Array<Array<Shape>>;
 
 	public function new() 
 	{
@@ -71,12 +72,22 @@ class Grid extends Collider
 	
 	public function addTileXY(x:Int, y:Int)
 	{
-		var space:Space = body.space;
+		var shape:Shape = new NapePolygon(NapePolygon.rect(x - width / 2, y - height / 2, tileWidth, tileHeight);
+		if (body.isStatic)
+		{
+			var space:Space = body.space;
+			body.space = null;
 		
-		body.shapes.add(new NapePolygon(NapePolygon.rect(x - width / 2, y - height / 2, tileWidth, tileHeight)));
+			body.shapes.add(shape);
+			shapes[cast x / tileWidth][cast y / tileHeight] = shape;
 		
-		body.space = null;
-		body.space = space;
+			body.space = space;
+		}
+		else
+		{
+			body.shapes.add(shape);
+			shapes[cast x / tileWidth][cast y / tileHeight] = shape;
+		}
 	}
 	
 	override public function loadConfig(data:Dynamic)
