@@ -35,6 +35,12 @@
 			"type": "image",
 			"file": "ground.png",
 			"name": "ground"
+		},
+		{
+			"id": "3f4b2034-29c3-4efa-991a-d43b5129102f",
+			"type": "image",
+			"file": "player_default.png",
+			"name": "player_default"
 		}
 	],
 	"rooms": [
@@ -48,7 +54,8 @@
 				"3bb2b0dd-e70b-4029-84ea-4ef00f019879",
 				"9ed239cd-88b9-483f-bc86-bf8abe551a07",
 				"bfcb048b-0d54-4d4d-bb98-077811b2c9ba",
-				"ff3bc496-298f-4e27-8b68-446bbe28fc7a"
+				"ff3bc496-298f-4e27-8b68-446bbe28fc7a",
+				"3f4b2034-29c3-4efa-991a-d43b5129102f"
 			]
 		}
 	],

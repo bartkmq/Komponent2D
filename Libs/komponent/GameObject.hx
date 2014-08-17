@@ -219,7 +219,7 @@ class GameObject
 		}
 		
 		if (!object.hasComponent(Transform))
-			object.components[0] = new Transform();
+			object.addComponent(Transform);
 		
 		for (i in 0...tempComponents.length)
 		{

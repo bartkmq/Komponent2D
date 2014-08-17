@@ -16,6 +16,7 @@ import komponent.utils.Screen;
 using nape.hacks.ForcedSleep;
 using komponent.utils.Parser;
 
+@:access(komponent.components.Transform)
 class Physics extends Component
 {
 
@@ -55,6 +56,7 @@ class Physics extends Component
 		transform.x = body.position.x;
 		transform.y = body.position.y;
 		transform.rotation = body.rotation;
+		transform.updateChildrensWorldTransformations();
 	}
 
 	override public function debugDraw():Void

@@ -8,7 +8,11 @@ import komponent.utils.Screen;
 
 using komponent.utils.Parser;
 
-@:allow(komponent.components.Physics)
+
+/**
+ * Dispatches:
+ * -> onScaleChange(this) when the (local/world) scale value is changed.
+ */
 class Transform extends Component
 {
 	/**
@@ -49,7 +53,7 @@ class Transform extends Component
 	 */
 	public var root(get, never):Transform;
 	
-	private function new() 
+	override public function added()
 	{
 		children = [];
 		resetWorld();
@@ -141,7 +145,12 @@ class Transform extends Component
 			
 			current = current.parent;
 		}
-		
+		sendMessage("onScaleChange", this);
+		updateChildrensWorldTransformations();
+	}
+	
+	private function updateChildrensWorldTransformations()
+	{
 		for (child in children)
 			child.updateWorldTransformation();
 	}

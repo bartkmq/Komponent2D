@@ -24,7 +24,7 @@ class Music extends Component
 	private var _music:KhaMusic;
 	private var _loop:Bool;
 	
-	private inline function new()
+	override public function added() 
 	{
 		_loop = false;
 	}

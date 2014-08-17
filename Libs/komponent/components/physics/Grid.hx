@@ -20,8 +20,9 @@ class Grid extends Collider
 	
 	private var shapes:Array<Array<Shape>>;
 
-	public function new() 
+	override public function added()
 	{
+		super.added();
 		tileWidth = 0;
 		tileHeight = 0;
 		tilesX = 0;

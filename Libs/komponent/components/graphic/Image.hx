@@ -47,9 +47,9 @@ class Image extends Graphic
 	
 	private var _image:KhaImage;
 
-	private function new() 
+	override public function added() 
 	{
-		super();
+		super.added();
 		alpha = 1;
 		color = Color.White;
 		flipX = flipY = false;

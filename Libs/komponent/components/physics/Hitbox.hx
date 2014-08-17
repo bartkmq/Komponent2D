@@ -21,8 +21,9 @@ class Hitbox extends Collider
 	public var width(default, null):Float;
 	public var height(default, null):Float;
 	
-	public function new()
+	override public function added()
 	{
+		super.added();
 		width = 0;
 		height = 0;
 	}

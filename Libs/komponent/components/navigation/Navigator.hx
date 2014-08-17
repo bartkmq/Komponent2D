@@ -41,8 +41,8 @@ class Navigator<T> extends Component
 	public var acceleration:Float;
 	
 	private var physics:Physics;
-
-	public function new() 
+	
+	override public function added()
 	{
 		path = [];
 		distance = 0;
@@ -58,10 +58,7 @@ class Navigator<T> extends Component
 		
 		maxVelocity = 50;
 		acceleration = 5;
-	}
-	
-	override public function added()
-	{
+		
 		physics = getComponent(Physics);
 		if (physics == null)
 			physics = addComponent(Physics);

@@ -18,8 +18,9 @@ class Circle extends Collider
 	
 	public var radius(default, null):Float;
 	
-	public inline function new()
+	override public function added()
 	{
+		super.added();
 		radius = 0;
 	}
 	

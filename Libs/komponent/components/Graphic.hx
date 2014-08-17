@@ -8,17 +8,12 @@ class Graphic extends Component
 {
 	
 	public var visible:Bool;
-	public var bounds(get, null):Rectangle;
+	public var bounds(get, never):Rectangle;
 	public var layer(default, set):Null<Int>;
-
-	public function new() 
-	{
-		visible = true;
-		bounds = new Rectangle(0, 0, 0, 0);
-	}
 	
 	override public function added()
 	{
+		visible = true;
 		layer = 0;
 	}
 	/**
@@ -38,7 +33,7 @@ class Graphic extends Component
 	private inline function get_bounds():Rectangle
 	{
 		trace("get_Bounds() not overridden!");
-		return bounds;
+		return new Rectangle(0, 0, 0, 0);
 	}
 	
 	private inline function set_layer(value:Int):Int

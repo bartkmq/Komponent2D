@@ -26,7 +26,7 @@ class Sound extends Component
 	private var _soundchannel:SoundChannel;
 	private var _stopped:Bool;
 	
-	private function new()
+	override public function added() 
 	{
 		loop = false;
 		_stopped = false;

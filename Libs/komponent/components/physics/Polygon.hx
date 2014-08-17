@@ -18,11 +18,6 @@ using komponent.utils.Parser;
 class Polygon extends Collider
 {
 	
-	private function new()
-	{
-		
-	}
-	
 	override public function debugDraw()
 	{
 		super.debugDraw();

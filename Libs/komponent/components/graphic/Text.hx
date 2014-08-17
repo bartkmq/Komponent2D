@@ -26,9 +26,9 @@ class Text extends Graphic
 	public var color:Color;
 	
 	
-	private function new() 
+	override public function added() 
 	{
-		super();
+		super.added();
 		text = "";
 		alpha = 1;
 		color = Color.White;

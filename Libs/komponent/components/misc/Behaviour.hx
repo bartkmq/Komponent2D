@@ -1,14 +1,9 @@
 package komponent.components.misc;
-
+/**
+ * Simple Finite state machine.
+ */
 class Behaviour
 {
-	/**
-	 * Simple Finite state machine.
-	 */
-
-	public function new() 
-	{
-		
-	}
+	
 	
 }

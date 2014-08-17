@@ -102,10 +102,13 @@ class Scene
 			if (engine.debug)
 				extension.debugDraw();
 		}
-		for (gameObject in gameObjects)
+		if (engine.debug)
 		{
-			if (gameObject.active)
-				gameObject.debugDraw();
+			for (gameObject in gameObjects)
+			{
+				if (gameObject.active)
+					gameObject.debugDraw();
+			}
 		}
 	}
 	
