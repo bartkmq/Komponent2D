@@ -1,54 +1,42 @@
 package komponent.components.physics;
 
-import kha.Color;
+import hxcollision.shapes.Polygon in hxPolygon;
 
-import nape.geom.GeomPoly;
-import nape.geom.GeomPolyList;
-import nape.phys.BodyType;
-import nape.geom.Vec2;
-import nape.shape.Polygon in NapePolygon;
- 
 import komponent.components.Collider;
-import komponent.extension.Nape;
 import komponent.utils.Painter;
-import komponent.utils.Screen;
-
-using komponent.utils.Parser;
+import komponent.ds.Point;
 
 class Polygon extends Collider
 {
 	
+	override public function added()
+	{
+		super.added();
+		setToRegularPolygon(25, 25, 5);
+	}
+	
 	override public function debugDraw()
 	{
-		super.debugDraw();
+		/*
+		var vertices:Array<Point> = cast(shape, hxPolygon).transformedVertices;
+		var count:Int = vertices.length;
 		
-		Painter.set(Color.fromBytes(91, 194, 54), 1);
-		for (camera in Screen.cameras)
-		{
-			Painter.camera = camera;
-			Painter.drawPolygon(cast shape, -Screen.camera.x, -Screen.camera.y);
-		}
+		Painter.drawLine2(vertices[0].x, vertices[0].y, vertices[1].x, vertices[1].y);
+		for (i in 1...count - 1)
+			Painter.drawLine2(vertices[i].x, vertices[i].y, vertices[i + 1].x, vertices[i + 1].y);
+		Painter.drawLine2(vertices[count].x, vertices[count].y, vertices[0].x, vertices[0].y);
+		*/
+		
 	}
 	
-	override private inline function setDefaultShape()
+	public function setVertices(vertices:Array<Point>):Void
 	{
-		setToRegularPolygon(50, 50, 5);
+		shape = new hxPolygon(0, 0, vertices);
 	}
 	
-	public inline function setVertices(vertices:Array<Vec2>):Void
+	public function setToRegularPolygon(radius:Float, edges:Int):Void
 	{
-		if (shape != null)
-			shape.body = null;
-		shape = new NapePolygon(vertices);
-		shape.body = body;
-	}
-	
-	public inline function setToRegularPolygon(RadiusX:Float, RadiusY:Float, edges:Int, angle:Float = 0):Void
-	{
-		if (shape != null)
-			shape.body = null;
-		shape = new NapePolygon(NapePolygon.regular(RadiusX, RadiusY, edges, angle, true));
-		shape.body = body;
+		shape = new hxPolygon.create(0, 0, radius, edges);
 	}
 	
 	override public function loadConfig(data:Dynamic)
@@ -56,7 +44,7 @@ class Polygon extends Collider
 		super.loadConfig(data);
 		if (data.regular != null)
 		{
-			setToRegularPolygon(data.radiusX.parse(25.0), data.radiusY.parse(25.0), data.edges.parse(5), data.angle.parse(0.0));
+			setToRegularPolygon(data.radius.parse(25.0), data.edges.parse(5));
 		}
 		else
 		{
@@ -65,10 +53,10 @@ class Polygon extends Collider
 				trace("Error loading Polygon vertices");
 			else
 			{
-				var points:Array<Vec2> = [];
+				var points:Array<Point> = [];
 				for (n in 0...Std.int(vertices.length / 2))
 				{
-					points.push(Vec2.weak(vertices[n], vertices[n + 1]));
+					points.push(new Point(vertices[n], vertices[n + 1]));
 				}
 				setVertices(points);
 			}

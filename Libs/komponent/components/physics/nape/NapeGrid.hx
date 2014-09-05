@@ -1,10 +1,10 @@
-package komponent.components.physics;
+package komponent.components.physics.nape ;
 
 import nape.space.Space;
 import nape.shape.Shape;
 import nape.shape.Polygon in NapePolygon;
 
-import komponent.components.Collider;
+import komponent.components.physics.nape.Collider;
 
 class Grid extends Collider
 {

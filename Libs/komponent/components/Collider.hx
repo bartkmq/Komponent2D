@@ -1,90 +1,77 @@
 package komponent.components;
 
-import kha.Color;
-
-import nape.phys.Material;
-import nape.phys.Body;
-import nape.shape.Shape;
-import nape.phys.BodyType;
-import nape.geom.Vec2;
-import nape.space.Space;
-
-import komponent.extension.Nape;
-import komponent.utils.Painter;
-import komponent.utils.Screen;
+import hxcollision.data.CollisionData;
+import hxcollision.Collision;
+import hxcollision.data.RayData;
+import hxcollision.shapes.Ray;
+import hxcollision.shapes.Shape;
 
 using komponent.utils.Parser;
 
+enum CollisionType
+{
+	BEGIN;
+	ONGOING;
+	END;
+}
+
 class Collider extends Component
 {
+	/**
+	* Base class for all colliders.
+	* 
+	* Dispatches:
+	* -> onCollision(collider, otherCollider, collisionType) when this colliders collides with another collider.
+	*/
 	
-	public var centerX(get, set):Float;
-	public var centerY(get, set):Float;
-	
-	public var body:Body;
+	public var active:Bool;
 	public var shape:Shape;
-	public var material(get, set):Material;
 	
-	public var isTrigger(get, set):Bool;
+	public static var colliders:Array<Collider> = [];
 	
-	override public function added():Void
+	override public function added()
 	{
-		checkBody();
-		setDefaultShape();
+		Collider.colliders.push(this);
 	}
 	
-	override public function debugDraw():Void
+	override public function update()
 	{
-		Painter.set(Color.fromBytes(91, 194, 54), 1); // green
-		for (camera in Screen.cameras)
-		{
-			Painter.camera = camera;
-			Painter.drawCross(shape.worldCOM.x, shape.worldCOM.y, 10, 10, 2);
-		}
-	}
-	
-	public inline function setCenter(x:Float, y:Float)
-	{
-		shape.localCOM.setxy(x, y);
-	}
-	
-	private inline function checkBody():Void
-	{	
-		var nape = scene.getExtension(Nape);
-		body = nape.bodies[gameObject];
+		shape.x = transform.x;
+		shape.y = transform.y;
+		shape.rotation = transform.rotation;
+		shape.scaleX = transform.scaleX;
+		shape.scaleY = transform.scaleY;
 		
-		if (body == null)
+		var collisions = collideGroup(colliders, true);
+		for (collision in collisions)
+			trace(collision);
+	}
+	
+	public function collide(otherCollider:Collider):CollisionData
+	{
+		return Collision.test(shape, otherCollider.shape);
+	}
+	
+	public function collideGroup(otherColliders:Array<Collider>, ignoreItself:Bool = false):Array<CollisionData>
+	{
+		var results:Array<CollisionData> = [];
+		for (collider in otherColliders)
 		{
-			var _transform = transform;
-			body = new Body(BodyType.KINEMATIC, Vec2.weak(_transform.x, _transform.y));
-			body.space = nape.space;
-			nape.bodies[gameObject] = body;
+			if (ignoreItself && collider.shape == shape) continue;
+			var result = Collision.test(shape, collider.shape);
+			if (result != null) results.push(result);
 		}
-		else
-		{
-			if (!hasComponent(Physics))
-				body.type = BodyType.KINEMATIC;
-		}
+		return results;
+	}
+	
+	public function raycast(ray:Ray):RayData
+	{
+		return shape.testRay(ray);
 	}
 	
 	override public function loadConfig(data:Dynamic):Void
 	{
-		centerX = data.centerX.parse(0.0);
-		centerY = data.centerY.parse(0.0);
-		isTrigger = data.isTrigger.parse(true);
+		
 	}
 	
-	private function setDefaultShape():Void { }
-	
-	private inline function get_isTrigger():Bool { return shape.sensorEnabled; }
-	private inline function set_isTrigger(value:Bool):Bool { return shape.sensorEnabled = value; }
-	
-	private inline function get_centerX():Float { return shape.localCOM.x; }
-	private inline function set_centerX(value:Float):Float { return shape.localCOM.x = value; }
-	
-	private inline function get_centerY():Float { return shape.localCOM.y; }
-	private inline function set_centerY(value:Float):Float { return shape.localCOM.y = value; }
-	
-	private inline function get_material():Material { return shape.material; }
-	private inline function set_material(value:Material):Material { return shape.material = value; }
 }
