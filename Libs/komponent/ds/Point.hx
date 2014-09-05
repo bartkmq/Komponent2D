@@ -1,29 +1,30 @@
-package komponent.ds ;
+package komponent.ds;
 
-import nape.geom.Vec2;
+import hxcollision.math.Vector;
 
-@:forward(x, y, copy, normalise)
-abstract Point(Vec2) from Vec2 to Vec2
+@:forward(x, y, clone, normalise, length)
+abstract Point(Vector) from Vector to Vector
 {
 
 	public inline function new(x:Float = 0, y:Float = 0) 
 	{
-		this = new Vec2(x, y);
+		this = new Vector(x, y);
 	}
 	
-	public inline function distance(point:Point):Float
+	public inline function distanceTo(point:Point):Float
 	{
 		return Math.sqrt(Math.pow(this.x - point.x, 2) + Math.pow(this.y - point.y, 2));
 	}
 	
 	public inline function setTo(point:Point):Void
 	{
-		this.set(point);
+		setPos(point.x, point.y);
 	}
 	
 	public inline function setPos(x:Float, y:Float):Void
 	{
-		this.setxy(x, y);
+		this.x = x;
+		this.y = y;
 	}
 	
 	public inline function equals(point:Point):Bool

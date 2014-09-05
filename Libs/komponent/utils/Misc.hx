@@ -6,22 +6,6 @@ import kha.Rectangle;
 
 import nape.phys.Material;
 
-// import all components so they get compiled
-import komponent.components.audio.Music;
-import komponent.components.audio.Sound;
-import komponent.components.graphic.Animation;
-import komponent.components.graphic.Image;
-import komponent.components.graphic.Text;
-import komponent.components.misc.Camera;
-import komponent.components.misc.Debug;
-import komponent.components.physics.Circle;
-import komponent.components.physics.Hitbox;
-import komponent.components.physics.Polygon;
-import komponent.components.Collider;
-import komponent.components.Graphic;
-import komponent.components.Physics;
-import komponent.components.Transform;
-
 class Misc
 {
 	

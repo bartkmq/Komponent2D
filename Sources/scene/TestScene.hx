@@ -11,7 +11,7 @@ import komponent.utils.Screen;
 import komponent.components.misc.Camera;
 import komponent.components.graphic.Image;
 import komponent.components.misc.Debug;
-import komponent.components.physics.Hitbox;
+import komponent.components.physics.nape.Hitbox;
 import komponent.components.graphic.Animation;
 
 import components.FollowMouse;

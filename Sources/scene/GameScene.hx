@@ -1,6 +1,5 @@
 package scene;
 
-import components.Player;
 import kha.Button;
 import kha.Color;
 import kha.Key;
@@ -15,8 +14,13 @@ import komponent.components.misc.Debug;
 import komponent.components.graphic.Animation;
 import komponent.components.physics.Hitbox;
 
+import components.Player;
+
 class GameScene extends Scene
 {
+	
+	public var player:GameObject;
+	public var ground:GameObject;
 	
 	public var config:Dynamic;
 
@@ -29,8 +33,12 @@ class GameScene extends Scene
 		
 		Screen.color = Color.fromString("#57A2DF");
 		
-		var player = new GameObject("Player", 200, 200);
+		player = new GameObject("Player", 200, 200);
 		player.addComponent(Player);
+		
+		ground = new GameObject("Ground", Screen.halfWidth, Screen.bottom - 10);
+		var hitbox = ground.addComponent(Hitbox);
+		hitbox.setSize(Screen.width, 10);
 	}
 	
 	override public function update()
@@ -43,6 +51,9 @@ class GameScene extends Scene
 			
 		if (Mouse.wheel)
 			Screen.camera.zoom += Mouse.wheelDelta * 0.01;
+			
+		trace(player.transform.x, player.transform.y);
+		trace(player.collider.shape.x, player.collider.shape.y);
 	}
 	
 }

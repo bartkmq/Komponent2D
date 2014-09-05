@@ -14,6 +14,8 @@ import nape.shape.Polygon;
 import nape.geom.Vec2List;
 import nape.geom.GeomPoly;
 
+import hxcollision.shapes.Polygon in hxPolygon;
+
 import komponent.components.misc.Camera;
 
 class Painter
@@ -344,6 +346,17 @@ class Painter
 		x = (x - Screen.halfWidth) * camera.fullScaleX + Screen.halfWidth;
 		y = (y - Screen.halfHeight) * camera.fullScaleY + Screen.halfHeight;
 		painter.drawString(text, x, y, Painter.scaleX * camera.fullScaleX, Painter.scaleY * camera.fullScaleY, scaleCenterX, scaleCenterY);
+	}
+	
+	public static inline function drawLine2(x1: Float, y1: Float, x2: Float, y2: Float, strength: Float = 1.0)
+	{
+		x1 = (x1 - Screen.halfWidth) * Painter.scaleX + Screen.halfWidth;
+		y1 = (y1 - Screen.halfHeight) * Painter.scaleY + Screen.halfHeight;
+		
+		x2 = (x2 - Screen.halfWidth) * Painter.scaleX + Screen.halfWidth;
+		y2 = (y2 - Screen.halfHeight) * Painter.scaleY + Screen.halfHeight;
+		
+		painter.drawLine(x1, y1, x2, y2, strength);
 	}
 	
 	public static inline function set(color:Color, alpha:Float, font:Font = null):Void
