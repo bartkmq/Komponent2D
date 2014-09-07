@@ -2,3 +2,9 @@
 	path = Kha
 	url = ../Kha
 	branch = master
+[submodule "hxcollision"]
+	path = Libs/hxcollision
+	url = https://github.com/underscorediscovery/hxcollision.git
+[submodule "hx-yaml"]
+	path = Libs/hx-yaml
+	url = https://github.com/mikestead/hx-yaml.git
