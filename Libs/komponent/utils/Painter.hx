@@ -8,12 +8,6 @@ import kha.Font;
 import kha.Video;
 import kha.Painter in KhaPainter;
 
-import nape.geom.GeomPolyList;
-import nape.shape.Shape;
-import nape.shape.Polygon;
-import nape.geom.Vec2List;
-import nape.geom.GeomPoly;
-
 import hxcollision.shapes.Polygon in hxPolygon;
 
 import komponent.components.misc.Camera;
@@ -241,86 +235,6 @@ class Painter
 		
 		fillTriangle(x1, y1, x2, y2, x3, y3);
 		fillTriangle(x3, y3, x4, y4, x1, y1);
-	}
-	
-	public static inline function drawPolygon(polygon:Polygon, x:Float = 0, y:Float = 0, strength:Float = 1):Void
-	{
-		x = ((polygon.body.position.x + x - Screen.halfWidth) * camera.fullScaleX + Screen.halfWidth) - polygon.body.position.x;
-		y = ((polygon.body.position.y + y - Screen.halfHeight) * camera.fullScaleY + Screen.halfHeight) - polygon.body.position.y;
-		
-		if (Painter.scaleX * camera.fullScaleX == 1 && Painter.scaleY * camera.fullScaleY == 1)
-		{
-			var iterator = polygon.worldVerts.iterator();
-			
-			var v0 = iterator.next();
-			var v1 = v0;
-
-			while (iterator.hasNext())
-			{
-				var v2 = iterator.next();
-				Painter.drawLine(v1.x + x, v1.y + y, v2.x + x, v2.y + y, strength);
-				v1 = v2;
-			}
-			Painter.drawLine(v1.x + x, v1.y + y, v0.x + x, v0.y + y, strength);
-		}
-		else
-		{
-			var polygonCopy:Polygon = cast polygon.copy();
-			polygonCopy.body = polygon.body;
-			polygonCopy.scale(Painter.scaleX * camera.fullScaleX, Painter.scaleY * camera.fullScaleY);
-			var iterator = polygonCopy.worldVerts.iterator();
-			
-			var v0 = iterator.next();
-			var v1 = v0;
-
-			while (iterator.hasNext())
-			{
-				var v2 = iterator.next();
-				Painter.drawLine(v1.x + x, v1.y + y, v2.x + x, v2.y + y, strength);
-				v1 = v2;
-			}
-			Painter.drawLine(v1.x + x, v1.y + y, v0.x + x, v0.y + y, strength);
-			polygonCopy.body = null;
-		}
-	}
-	
-	public static inline function fillPolygon(polygon:Polygon, x:Float = 0, y:Float = 0):Void
-	{
-		x = (polygon.body.position.x + x - Screen.halfWidth) * Painter.scaleX + Screen.halfWidth;
-		y = (polygon.body.position.y + y - Screen.halfHeight) * Painter.scaleY + Screen.halfHeight;
-		
-		var polygons:GeomPolyList;
-		if (Painter.scaleX * camera.fullScaleX == 1 && Painter.scaleY * camera.fullScaleY == 1)
-		{
-			var geompoly = GeomPoly.get(polygon.worldVerts);
-			polygons = geompoly.triangularDecomposition();
-			geompoly.dispose();
-		}
-		else
-		{
-			var polygonCopy:Polygon = cast polygon.copy();
-			polygonCopy.scale(Painter.scaleX * camera.fullScaleX, Painter.scaleY * camera.fullScaleY);
-			polygonCopy.body = polygon.body;
-			
-			var geompoly = GeomPoly.get(polygonCopy.worldVerts);
-			polygons = geompoly.triangularDecomposition();
-			geompoly.dispose();
-			
-			polygonCopy.body = null;
-		}
-		
-		for (polygon in polygons)
-		{
-			var iterator = polygon.iterator();
-			for (i in 0...polygon.size())
-			{
-				var v1 = iterator.next();
-				var v2 = iterator.next();
-				var v3 = iterator.next();
-				Painter.fillTriangle(v1.x + x, v1.y + y, v2.x + x, v2.y + y, v3.x + x, v3.y + y);
-			}
-			polygon.dispose();
-		}
 	}
 	
 	// draws a cross with center at x/y

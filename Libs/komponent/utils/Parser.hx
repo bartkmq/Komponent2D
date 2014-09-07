@@ -6,9 +6,6 @@ import kha.FontStyle;
 import kha.Key;
 import kha.Rectangle;
 
-import nape.phys.BodyType;
-import nape.phys.Material;
-
 using komponent.utils.Parser;
 
 class Parser
@@ -68,15 +65,6 @@ class Parser
 		return defaultColor;
 	}
 	
-	public static inline function parseNapeMaterial(data:Dynamic, defaultMaterial:Material):Material
-	{
-		if (data != null)
-			defaultMaterial = new Material(data.elasticity.parse(0.0), data.dynamicFriction.parse(1.0),
-											data.staticFriction.parse(2.0), data.density.parse(1.0),
-											data.rollingFriction.parse(0.001));
-		return defaultMaterial;
-	}
-	
 	public static inline function parseButton(data:Dynamic, defaultButton:Button):Button
 	{
 		return (data != null) ? Type.createEnum(Button, data.toUpperCase()) : defaultButton;
@@ -86,18 +74,5 @@ class Parser
 	{
 		return (data != null) ? Type.createEnum(Key, data.toUpperCase()) : defaultKey;
 	}
-	
-	public static inline function parseBodyType(data:Dynamic, defaultBodyType:BodyType):BodyType
-	{
-		if (data != null)
-			switch (data.toUpperCase())
-			{
-				case "DYNAMIC": defaultBodyType = BodyType.DYNAMIC;
-				case "KINEMATIC": defaultBodyType = BodyType.KINEMATIC;
-				case "STATIC": defaultBodyType = BodyType.STATIC;
-				default: trace("Invalid BodyType: $data");
-			}
-		return defaultBodyType;
-	}
-	
+
 }

@@ -4,8 +4,6 @@ import kha.Color;
 import kha.FontStyle;
 import kha.Rectangle;
 
-import nape.phys.Material;
-
 class Misc
 {
 	

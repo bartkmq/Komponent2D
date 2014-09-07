@@ -4,7 +4,6 @@ import komponent.components.Graphic;
 import komponent.utils.Misc;
 import komponent.utils.Painter;
 import komponent.utils.Screen;
-import komponent.extension.Nape;
 
 using komponent.utils.Misc;
 
