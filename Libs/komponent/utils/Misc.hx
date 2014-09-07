@@ -52,4 +52,18 @@ class Misc
 		untyped array.length = 0;
 		#end
 	}
+	
+	// checks if the array contains the element
+	public static inline function contains<T>(array:Array<T>, element:T):Bool
+	{
+		return array.indexOf(element) != -1;
+	}
+	
+	// clamps a value in a specific range
+	public static inline function clamp(value:Float, min:Float, max:Float):Float
+	{
+		if (value > max) value = max;
+		if (value < min) value = min;
+		return value;
+	}
 }

@@ -4,7 +4,17 @@ import kha.input.Mouse in KhaMouse;
 
 import komponent.utils.Screen;
 
-@:allow(komponent.Engine)
+enum MouseButton
+{
+	LEFT;
+	RIGHT;
+	// if the wheel was pressed
+	MIDDLE;
+	// if the wheel was moved
+	WHEEL;
+}
+
+@:allow(komponent.input.Input)
 class Mouse
 {
 	/**
@@ -89,6 +99,17 @@ class Mouse
 	 */
 	public static var sceneY(get, never):Float;
 	private static inline function get_sceneY():Float { return (y - Screen.camera.x - Screen.halfHeight) / Screen.camera.fullScaleY + Screen.halfHeight; }
+	
+	public static function check(mouseButton:MouseButton):Bool
+	{
+		switch (mouseButton)
+		{
+			case LEFT: return leftButtonDown;
+			case RIGHT: return rightButtonDown;
+			case MIDDLE: return middleButtonDown;
+			case WHEEL: return wheel;
+		}
+	}
 	
 	private static function init()
 	{

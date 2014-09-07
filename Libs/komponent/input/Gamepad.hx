@@ -16,7 +16,7 @@ enum ButtonStatus
 /**
  * Interface to acess Gamepad input.
  */
-@:allow(komponent.Engine)
+@:allow(komponent.input.Input)
 class Gamepad
 {
 	/**

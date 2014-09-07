@@ -6,6 +6,7 @@ import kha.Rectangle;
 import komponent.utils.Screen;
 import komponent.utils.Time;
 
+@:allow(komponent.input.Input)
 class Touch
 {
 	
@@ -77,7 +78,7 @@ class Touch
 		return false;
 	}
 	
-	public static function init()
+	private static function init()
 	{
 		touches = new Map();
 		definitions = new Map();
@@ -85,7 +86,7 @@ class Touch
 			Surface.get().notify(onTouchStart, onTouchEnd, onTouchMove);
 	}
 	
-	public static function update()
+	private static function update()
 	{
 		for (touch in touches)
 		{

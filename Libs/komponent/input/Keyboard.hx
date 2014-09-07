@@ -5,7 +5,7 @@ import kha.Key;
 
 using komponent.utils.Parser;
 
-@:allow(komponent.Engine)
+@:allow(komponent.input.Input)
 class Keyboard //TODO: Fix pressed()
 {
 	
@@ -137,7 +137,7 @@ class Keyboard //TODO: Fix pressed()
 		return false;
 	}
 	
-	public static inline function update()
+	private static inline function update()
 	{	
 		_releasedChars = [];
 		_releasedModifiers = [];
