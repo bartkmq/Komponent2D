@@ -13,6 +13,7 @@ import komponent.components.misc.Camera;
 import komponent.components.misc.Debug;
 import komponent.components.graphic.Animation;
 import komponent.components.physics.Hitbox;
+import komponent.components.Physics;
 
 import components.Player;
 
@@ -36,9 +37,10 @@ class GameScene extends Scene
 		player = new GameObject("Player", 200, 200);
 		player.addComponent(Player);
 		
-		ground = new GameObject("Ground", Screen.halfWidth, Screen.bottom - 10);
+		ground = new GameObject("Ground", Screen.halfWidth, Screen.bottom - 10, "ground");
 		var hitbox = ground.addComponent(Hitbox);
 		hitbox.setSize(Screen.width, 10);
+		trace("");
 	}
 	
 	override public function update()
@@ -52,8 +54,8 @@ class GameScene extends Scene
 		if (Mouse.wheel)
 			Screen.camera.zoom += Mouse.wheelDelta * 0.01;
 			
-		trace(player.transform.x, player.transform.y);
-		trace(player.collider.shape.x, player.collider.shape.y);
+		//trace(player.transform.x, player.transform.y);
+		//trace(player.collider.shape.x, player.collider.shape.y);
 	}
 	
 }

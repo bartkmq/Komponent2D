@@ -1,180 +1,297 @@
 package komponent.components;
 
-import kha.Color;
+import hxcollision.Collision;
 
-import nape.geom.Vec2;
-import nape.phys.Material;
-import nape.phys.BodyType;
-import nape.phys.Body;
-import nape.shape.Polygon;
-import nape.shape.Shape;
+import komponent.Component;
+import komponent.GameObject;
+import komponent.utils.Time;
+import komponent.utils.Misc;
+import komponent.physics.CollisionData2D;
+import komponent.physics.CollisionEvent;
 
-import komponent.extension.Nape;
-import komponent.utils.Painter;
-import komponent.utils.Screen;
+enum VelocityLimit
+{
+	SEPERATE(velocityX:Float, velocityY:Float);
+	REALISTIC(velocity:Float);
+}
 
-using nape.hacks.ForcedSleep;
-using komponent.utils.Parser;
-
-@:access(komponent.components.Transform)
+/**
+ * Removes the parent of this GameObject!
+ * 
+ * Dispatches:
+ * -> onCollision(CollisionData2D) when a collision happens while moving.
+ */
 class Physics extends Component
 {
 
-	public var velocityX(get, set):Float;
-	public var velocityY(get, set):Float;
-
-	public var angularVelocity(get, set):Float;
-
-	public var mass(get, set):Float;
-	public var type(get, set):BodyType;
-
-	public var allowRotation(get, set):Bool;
-	public var allowMovement(get, set):Bool;
-	public var bullet(get, set):Bool;
-	public var awake(get, never):Bool;
-	public var sleeping(get, never):Bool;
-
-	public var body(default, null):Body;
-
-	/**
-	 * A body needs atleast one shape.
-	 * This shape is used when the body has no shape.
+	public var velocityX:Float;
+	public var velocityY:Float;
+	
+	public var angularVelocity:Float;
+	
+	/*
+	 * Gravity is added to the velocity every update.
 	 */
-	private var temporaryShape:Polygon;
-
+	public var gravityX:Float;
+	public var gravityY:Float;
+	
+	/**
+	 * Determines how much of the original velocity is retained after bouncing against another collider.
+	 * Should be between 0 and 1.
+	 */
+	public var elasticityX:Float;
+	public var elasticityY:Float;
+	
+	/**
+	 * Maximal Velocity.
+	 */
+	public var maxVelocity:VelocityLimit;
+	
+	/**
+	 * If the velocity is below this value it will be set to 0.
+	 */
+	public var minVelocity:VelocityLimit;
+	
+	/**
+	 * Maximal angular velocity.
+	 */
+	public var maxAngularVelocity:Float;
+	
+	/*
+	 * If false the GameObjects velocity will be applied by directly modifying its position
+	 * instead of using moveBy() wich causes it to ignore collisions.
+	 */
+	public var useMoveBy:Bool;
+	
+	/*
+	 * Collision types to collide against when applying velocity.
+	 */
+	public var moveByTypes(default, null):Array<String>;
+	
+	/**
+	 * This Callback is used to determine if 2 Colliders should collide.
+	 * By default a collision is always accepted.
+	 * If the function returns true a onCollision message will be dispatched.
+	 */
+	public var moveCollideX:(CollisionData2D->Bool);
+	public var moveCollideY:(CollisionData2D->Bool);
+	
+	/**
+	 * All Colliders currently colliding with this Collider.
+	 */
+	public var currentColliders:Array<Collider>;
+	
+	/**
+	 * Internal data to increase precision of moveBy()
+	 */
+	private var moveX:Float;
+	private var moveY:Float;
+	
+	/**
+	 * The default values of a new Physics component.
+	 */
+	public static var defaultGravityX = 0;
+	public static var defaultGravityY = 100;
+	public static var defaultElasticity = 0;
+	
 	override public function added()
 	{
-		checkBody();
+		velocityX = velocityY = 0;
+		angularVelocity = 0;
+		gravityX = defaultGravityX;
+		gravityY = defaultGravityY;
+		elasticityX = elasticityY = defaultElasticity;
+		maxVelocity = null;
+		minVelocity = SEPERATE(0.01, 0.01);
+		useMoveBy = true;
+		moveByTypes = [];
+		currentColliders = [];
+		moveX = moveY = 0;
+		moveCollideX = moveCollideY = moveCollideXY;
 		
-		// if the body has no shapes add temporaryShape
-		checkTemporaryShape();
+		gameObject.transform.parent = null;
 	}
-
-	override public function update():Void
+	
+	override public function update()
 	{
-		checkTemporaryShape();
-		transform.x = body.position.x;
-		transform.y = body.position.y;
-		transform.rotation = body.rotation;
-		transform.updateChildrensWorldTransformations();
-	}
-
-	override public function debugDraw():Void
-	{
-		if (temporaryShape != null)
-		{
-			Painter.set(Color.fromBytes(132, 31, 39), 1);
-			for (camera in Screen.cameras)
-			{
-				Painter.camera = camera;
-				Painter.drawPolygon(temporaryShape, -Screen.camera.x, -Screen.camera.y);
-			}
-		}
-	}
-
-	public inline function applyImpulse(forceX:Float, forceY:Float, sleepable:Bool = false):Void
-	{
-		body.applyImpulse(Vec2.weak(forceX, forceY), null, sleepable);
-	}
-
-	public inline function applyImpulseAtPosition(forceX:Float, forceY:Float, x:Float, y:Float, sleepable:Bool = false):Void
-	{
-		body.applyImpulse(Vec2.weak(forceX, forceY), Vec2.weak(x, y), sleepable);
-	}
-
-	public inline function applyAngularImpulse(impulse:Float, sleepable:Bool):Void
-	{
-		body.applyAngularImpulse(impulse, sleepable);
-	}
-
-	public inline function sleep():Void
-	{
-		body.sleepBody();
-	}
-
-	private inline function checkBody()
-	{
-		var nape = scene.getExtension(Nape);
-		body = nape.bodies[gameObject];
+		velocityX += gravityX * Time.elapsed;
+		velocityY += gravityY * Time.elapsed;
 		
-		if (body == null)
+		if (useMoveBy)
 		{
-			body = new Body(BodyType.DYNAMIC, Vec2.weak(transform.x, transform.y));
-			body.space = nape.space;
-			nape.bodies[gameObject] = body;
+			moveBy(velocityX * Time.elapsed, velocityY * Time.elapsed);
 		}
 		else
 		{
-			body.type = BodyType.DYNAMIC;
+			transform.localX += velocityX * Time.elapsed;
+			transform.localY += velocityY * Time.elapsed;
 		}
+		transform.localRotation += angularVelocity * Time.elapsed;
 	}
-
-	private inline function checkTemporaryShape():Void
+	
+	/**
+	 * This is the default function for moveCollideX/Y.
+	 */
+	public static function moveCollideXY(collision:CollisionData2D):Bool
+	{	
+		var physics = collision.physics;
+		physics.velocityX *= -physics.elasticityX;
+		physics.velocityY *= -physics.elasticityY;
+		return true;
+	}
+	
+	public function moveBy(deltaX:Float, deltaY:Float, sweep:Bool = false):Void
 	{
-		if (temporaryShape != null)
+		var types = (moveByTypes.length == 0) ? [""] : moveByTypes;
+		
+		moveX += deltaX;
+		moveY += deltaY;
+		deltaX = Math.fround(moveX);
+		deltaY = Math.fround(moveY);
+		moveX -= deltaX;
+		moveY -= deltaY;
+		
+		var newX = transform.x;
+		var newY = transform.y;
+		
+		if (types != null)
 		{
-			// remove tempShape if the body has another shape
-			if (body.shapes.length >= 2)
+			var sign:Int;
+			var result:CollisionData2D;
+			if (deltaX != 0)
 			{
-				//temporaryShape.body = null;
-				temporaryShape.body = null;
-				temporaryShape = null;
+				if (gameObject.active && (sweep || collideTypes(newX + deltaX, newY, types) != null))
+				{
+					sign = (deltaX > 0) ? 1 : -1;
+					while (deltaX != 0)
+					{
+						if ((result = collideTypes(newX + sign, newY, types)) != null)
+						{
+							if (moveCollideX == null || moveCollideX(result))
+							{
+								if (Misc.contains(currentColliders, result.collider2))
+									result.event = ONGOING;
+								else
+									currentColliders.push(result.collider2);
+								sendMessage("onCollision", result);
+								break;
+							}
+							else newX += sign;
+						}
+						else
+						{
+							newX += sign;
+						}
+						deltaX -= sign;
+					}
+				}
+				else newX += deltaX;
 			}
+			if (deltaY != 0)
+			{
+				if (gameObject.active && (sweep || collideTypes(newX, newY + deltaY, types) != null))
+				{
+					sign = (deltaY > 0) ? 1 : -1;
+					while (deltaY != 0)
+					{
+						if ((result = collideTypes(newX, newY + sign, types)) != null)
+						{
+							if (moveCollideY == null || moveCollideY(result))
+							{
+								if (Misc.contains(currentColliders, result.collider2))
+									result.event = ONGOING;
+								else
+									currentColliders.push(result.collider2);
+								sendMessage("onCollision", result);
+								break;
+							}
+							else newY += sign;
+						}
+						else
+						{
+							newY += sign;
+						}
+						deltaY -= sign;
+					}
+				}
+				else newY += deltaY;
+			}
+			transform.localX = newX;
+			transform.localY = newY;
 		}
 		else
 		{
-			// add tempShape if the body has no shape
-			if (body.shapes.empty())
-			{
-				temporaryShape = new Polygon(Polygon.box(5, 5, true));
-				temporaryShape.body = body;
-			}
+			transform.localX += deltaY;
+			transform.localY += deltaY;
 		}
 	}
 	
-	override public function loadConfig(data:Dynamic):Void
+	public function collideTypes(x:Float, y:Float, types:Array<String>):CollisionData2D
 	{
-		velocityX = data.velocityX.parse(0.0);
-		velocityY = data.velocityY.parse(0.0);
-		angularVelocity = data.angularVelocity.parse(0.0);
-		
-		var mass:Null<Float> = data.mass;
-		if (mass != null) this.mass = mass;
-		
-		type = data.bodyType.parseBodyType(BodyType.DYNAMIC);
-		allowRotation = data.allowRotation.parse(true);
-		allowMovement = data.allowMovement.parse(true);
-		bullet = data.bullet.parse(false);
-		
-		if (data.sleeping.parse(false))
-			sleep();
+		for (type in types)
+		{
+			var typeColliders = Collider.typeColliders[type];
+			for (collider in gameObject.colliders)
+			{
+				if (collider.active)
+				{
+					for (otherCollider in typeColliders)
+					{
+						if (otherCollider.active)
+						{
+							var oldX:Float = collider.shape.x;
+							var oldY:Float = collider.shape.y;
+							collider.shape.x = x;
+							collider.shape.y = y;
+							
+							var result = Collision.test(collider.shape, otherCollider.shape);
+							
+							collider.shape.x = oldX;
+							collider.shape.y = oldY;
+							
+							if (result != null)
+								return new CollisionData2D(result, collider, otherCollider, this, CollisionEvent.BEGIN);
+							else
+								return null;
+						}
+					}
+				}
+			}
+		}
+		return null;
 	}
-
-	private inline function get_velocityX():Float { return body.velocity.x; }
-	private inline function set_velocityX(value:Float):Float { return body.velocity.x = value; }
-
-	private inline function get_velocityY():Float { return body.velocity.y; }
-	private inline function set_velocityY(value:Float):Float { return body.velocity.y = value; }
-
-	private inline function get_angularVelocity():Float { return body.angularVel; }
-	private inline function set_angularVelocity(value:Float):Float { return body.angularVel = value; }
-
-	private inline function get_mass():Float { return body.mass; }
-	private inline function set_mass(value:Float):Float { return body.mass = value; }
-
-	private inline function get_type():BodyType { return body.type; }
-	private inline function set_type(value:BodyType):BodyType { return body.type = value; }
-
-	private inline function get_allowRotation():Bool { return body.allowRotation; }
-	private inline function set_allowRotation(value:Bool):Bool { return body.allowRotation = value; }
-
-	private inline function get_allowMovement():Bool { return body.allowMovement; }
-	private inline function set_allowMovement(value:Bool):Bool { return body.allowMovement = value; }
-
-	private inline function get_bullet():Bool { return body.isBullet; }
-	private inline function set_bullet(value:Bool):Bool { return body.isBullet = value; }
-
-	private inline function get_sleeping():Bool { return body.isSleeping; }
-
-	private inline function get_awake():Bool { return !body.isSleeping; }
+	
+	public function collideTypesInto(x:Float, y:Float, types:Array<String>):Array<CollisionData2D>
+	{
+		var results = [];
+		for (type in types)
+		{
+			var typeColliders = Collider.typeColliders[type];
+			for (collider in gameObject.colliders)
+			{
+				if (collider.active)
+				{
+					for (otherCollider in typeColliders)
+					{
+						if (otherCollider.active)
+						{
+							var result = Collision.test(collider.shape, otherCollider.shape);
+							if (result != null)
+							{
+								results.push(new CollisionData2D(result, collider, otherCollider, this, CollisionEvent.BEGIN));
+							}
+						}
+					}
+				}
+			}
+		}
+		return results;
+	}
+	
+	public function resetVelocity()
+	{
+		velocityX = 0;
+		velocityY = 0;
+	}
+	
 }

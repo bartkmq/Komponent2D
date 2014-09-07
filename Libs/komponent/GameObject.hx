@@ -28,10 +28,17 @@ class GameObject
 	public var transform(get, never):Transform;
 	public var graphic(get, never):Graphic;
 	public var collider(get, never):Collider;
+	public var colliders:Array<Collider>;
 	
 	public var scene:Scene;
 	public var active:Bool;
 	public var name(default, null):String;
+	
+	/**
+	 * Default collision type that colliders added to this GameObject will have.
+	 * Changing the type of this GameObject does not affect the type of already added colliders.
+	 */
+	public var type:String;
 	
 	private var components:Array<Component>;
 	
@@ -41,11 +48,13 @@ class GameObject
 	 * @param	x			X position to place the Entity.
 	 * @param	y			Y position to place the Entity.
 	 */
-	public function new(name:String, x:Float = 0, y:Float = 0) 
+	public function new(name:String, x:Float = 0, y:Float = 0, type:String = "") 
 	{
 		this.name = name;
+		this.type = type;
 		active = true;
 		components = [];
+		colliders = [];
 		Misc.engine.currentScene.add(this);
 		
 		addComponent(Transform);
@@ -244,7 +253,7 @@ class GameObject
 		}
 		return value;
 	}
-	
+		
 	private inline function get_transform():Transform { return cast components[0]; }
 	private inline function get_graphic():Graphic { return getComponent(Graphic); }
 	private inline function get_collider():Collider { return getComponent(Collider); }

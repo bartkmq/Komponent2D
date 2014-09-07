@@ -1,8 +1,5 @@
 package komponent.components.physics;
 
-import hxcollision.shapes.Circle in hxCircle;
-import hxcollision.shapes.KhaDrawer;
-
 import komponent.components.Collider;
 import komponent.utils.Painter;
 
@@ -24,7 +21,7 @@ class Circle extends Collider
 	
 	public inline function setRadius(radius:Float):Void
 	{
-		shape = new hxCircle(0, 0, radius);
+		shape = new HxCircle(transform.x, transform.y, radius);
 		this.radius = radius;
 	}
 	

@@ -11,7 +11,7 @@ using komponent.utils.Parser;
 
 /**
  * Dispatches:
- * -> onScaleChange(this) when the (local/world) scale value is changed.
+ * -> onTransformChange(this) when the (local/world) transformation is changed.
  */
 class Transform extends Component
 {
@@ -145,7 +145,7 @@ class Transform extends Component
 			
 			current = current.parent;
 		}
-		sendMessage("onScaleChange", this);
+		sendMessage("onTransformChange", this);
 		updateChildrensWorldTransformations();
 	}
 	

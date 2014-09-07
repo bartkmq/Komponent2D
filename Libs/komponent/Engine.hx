@@ -1,7 +1,5 @@
 package komponent;
 
-import nape.geom.Vec2;
-
 import yaml.Parser;
 import yaml.Renderer;
 import yaml.Yaml;
@@ -11,16 +9,13 @@ import kha.Game;
 import kha.Loader;
 import kha.LoadingScreen;
 import kha.Scheduler;
+import kha.Painter in KhaPainter;
 
-import komponent.extension.Nape;
 import komponent.utils.Misc;
 import komponent.utils.Time;
 import komponent.utils.Painter;
 import komponent.utils.Screen;
-import komponent.input.Keyboard;
-import komponent.input.Mouse;
-import komponent.input.Gamepad;
-import komponent.input.Touch;
+import komponent.input.Input;
 
 using komponent.utils.Misc;
 
@@ -100,9 +95,7 @@ class Engine extends Game
 		Misc.engine = this;
 		
 		// init Input
-		Keyboard.init();
-		Mouse.init();
-		Touch.init();
+		Input.init();
 		
 		if (_config != null)
 		{
@@ -126,18 +119,15 @@ class Engine extends Game
 	override public function update():Void
 	{
 		Time.start("updating");
-		currentScene.update();
 		
-		Keyboard.update();
-		Mouse.update();
-		Gamepad.update();
-		Touch.update();
+		currentScene.update();
+		Input.update();
 		
 		Time.frames++;
 		Time.stop("updating");
 	}
 	
-	override public function render(khaPainter:kha.Painter):Void
+	override public function render(khaPainter:KhaPainter):Void
 	{
 		Time.start("rendering");
 		startRender(khaPainter);

@@ -1,26 +1,29 @@
 package components;
 
 import kha.Key;
+import komponent.components.Physics;
 
-import hxcollision.Collision;
+import komponent.physics.CollisionData2D;
 
 import komponent.GameObject;
 import komponent.components.physics.Hitbox;
 import komponent.components.graphic.Animation;
 import komponent.components.combat.Health;
 import komponent.input.Keyboard;
+import komponent.input.Input;
+import komponent.input.Input.AxisInput;
 import komponent.utils.Screen;
+import komponent.utils.Misc;
 import komponent.Component;
 import komponent.utils.Time;
 
 class Player extends Component
 {
 	
-	public var movementSpeed:Float = 5;
+	public var movementSpeed:Float = 200;
 	
 	private var animation:Animation;
-	private var hitbox:Hitbox;
-	private var ground:Hitbox;
+	private var physics:Physics;
 
 	override public function added() 
 	{		
@@ -28,6 +31,9 @@ class Player extends Component
 		Keyboard.define("down", ["s"], [Key.DOWN]);
 		Keyboard.define("left", ["a"], [Key.LEFT]);
 		Keyboard.define("right", ["d"], [Key.RIGHT]);
+		
+		Input.defineAxis("horizontal", [KEYBOARD("left", -1), KEYBOARD("right", 1)]);
+		Input.defineAxis("vertical", [KEYBOARD("up", -1), KEYBOARD("down", 1)]);
 		
 		animation = addComponent(Animation);
 		animation.loadSpritemap("player_default", 16, 26);
@@ -37,8 +43,11 @@ class Player extends Component
 		animation.add("right", [10, 11, 9], 6, true);
 		animation.play("down");
 		
-		hitbox = addComponent(Hitbox);
-		hitbox.setSize(16, 26);
+		addComponent(Hitbox).setSize(16, 26);
+		
+		physics = addComponent(Physics);
+		physics.moveByTypes.push("ground");
+		physics.elasticityY = 0.8;
 		
 		addComponent(Health);
 	}
@@ -46,50 +55,20 @@ class Player extends Component
 	override public function update()
 	{
 		handleInput();
-		
-		if (ground == null)
-		{
-			ground = getGameObjectByName("Ground").getComponent(Hitbox);
-		}
-		var collision = Collision.test(hitbox.shape, ground.shape);
-		if (collision != null)
-		{
-			transform.localX += collision.separation.x;
-			transform.localY += collision.separation.y;
-		}
 	}
 	
 	private function handleInput()
 	{
-		if (Keyboard.check("up"))
-		{
-			animation.play("up");
-			transform.localY -= movementSpeed;
-		}
-		else if (Keyboard.check("down"))
-		{
-			animation.play("down");
-			transform.localY += movementSpeed;
-		}
-		else if (Keyboard.check("left"))
-		{
-			animation.play("left");
-			transform.localX -= movementSpeed;
-		}
-		else if (Keyboard.check("right"))
-		{
-			animation.play("right");
-			transform.localX += movementSpeed;
-		}
-		else
-		{
-			animation.stop();
-		}
+		var deltaX = Input.getAxis("horizontal") * movementSpeed * Time.elapsed;
+		var deltaY = Input.getAxis("vertical") * movementSpeed * Time.elapsed;
+		
+		physics.moveBy(deltaX, deltaY);
 	}
 	
-	private function onCollision()
+	private function onCollision(collision:CollisionData2D)
 	{
-		trace("Ground Collision");
+		var separation = collision.separation;
+		trace(collision.collider1.gameObject.name + ", " + collision.collider2.gameObject.name +  ": " + collision.event);
 	}
 	
 }
