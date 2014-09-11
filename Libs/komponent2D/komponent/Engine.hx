@@ -9,7 +9,7 @@ import kha.Game;
 import kha.Loader;
 import kha.LoadingScreen;
 import kha.Scheduler;
-import kha.Painter in KhaPainter;
+import kha.Framebuffer;
 
 import komponent.utils.Misc;
 import komponent.utils.Time;
@@ -127,13 +127,13 @@ class Engine extends Game
 		Time.stop("updating");
 	}
 	
-	override public function render(khaPainter:KhaPainter):Void
+	override public function render(framebuffer:Framebuffer):Void
 	{
 		Time.start("rendering");
-		startRender(khaPainter);
-		Painter.painter = khaPainter;
+		startRender(framebuffer);
+		Painter.framebuffer = framebuffer;
 		currentScene.render();
-		endRender(khaPainter);
+		endRender(framebuffer);
 		Time.stop("rendering");
 	}
 	

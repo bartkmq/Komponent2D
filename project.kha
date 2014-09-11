@@ -60,6 +60,8 @@
 		}
 	],
 	"sources": [
-		"Libs"
+		"Libs/komponent2D",
+        "Libs/hx-yaml/src/",
+        "Libs/hxcollision"
 	]
 }

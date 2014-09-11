@@ -1,12 +1,13 @@
 package komponent.utils;
 
+import kha.graphics2.Graphics in Graphics2;
+import kha.graphics4.Graphics in Graphics4;
 import kha.Image;
 import kha.Color;
 import kha.Rectangle;
-import kha.Rotation;
 import kha.Font;
 import kha.Video;
-import kha.Painter in KhaPainter;
+import kha.Framebuffer;
 
 import hxcollision.shapes.Polygon in hxPolygon;
 
@@ -15,7 +16,9 @@ import komponent.components.misc.Camera;
 class Painter
 {
 	
-	public static var painter:KhaPainter;
+	public static var framebuffer(never, set):Framebuffer;
+	public static var g2(default, null):Graphics2;
+	public static var g4(default, null):Graphics4;
 	
 	public static var color(never, set):Color;
 	public static var alpha(get, set):Float;
@@ -29,7 +32,6 @@ class Painter
 	{
 		cx = (cx - Screen.halfWidth) * camera.fullScaleX + Screen.halfWidth;
 		cy = (cy - Screen.halfHeight) * camera.fullScaleY + Screen.halfHeight;
-		
 		strength *= (camera.fullScaleX * camera.fullScaleY) / 2;
 		r *= (camera.fullScaleX * camera.fullScaleY) / 2;
 		
@@ -52,7 +54,7 @@ class Painter
 			x = c * x - s * y;
 			y = c * y + s * t;
 			
-			painter.drawLine(px, py, x + cx, y + cy, strength);
+			g2.drawLine(px, py, x + cx, y + cy, strength);
 		}
 	}
 	
@@ -81,7 +83,7 @@ class Painter
 			x = c * x - s * y;
 			y = c * y + s * t;
 			
-			painter.fillTriangle(px, py, x + cx, y + cy, cx, cy);
+			g2.fillTriangle(px, py, x + cx, y + cy, cx, cy);
 		}
 	}
 	
@@ -156,7 +158,9 @@ class Painter
 			{
 				while (tx < tiledWidth)
 				{
-					Painter.drawImage2(image, sx, sy, dw, sh, x + tx, y + ty, dw, dh, rotation, centerX, centerY);
+					//Painter.drawImage2(image, sx, sy, sw, sh, x + tx, y + ty, dw, dh, rotation, centerX, centerY);
+					// TODO: rotation
+					g2.drawScaledSubImage(image, sx, sy, sw, sh, x + tx, y + ty, dw, dh); 
 					tx += dw;
 				}
 				tx = 0;
@@ -165,7 +169,9 @@ class Painter
 		}
 		else
 		{
-			drawImage2(image, sx, sy, sw, sh, x, y, dw, dh, rotation, centerX, centerY);
+			//drawImage2(image, sx, sy, sw, sh, x, y, dw, dh, rotation, centerX, centerY);
+			// TODO: rotation
+			g2.drawScaledSubImage(image, sx, sy, sw, sh, x, y, dw, dh);
 		}
 	}
 	
@@ -198,10 +204,10 @@ class Painter
 		var x4 = cos * (x - centerX) - sin * (y + height - centerY) + centerX;
 		var y4 = sin * (x - centerX) + cos * (y + height - centerY) + centerY;
 		
-		drawLine(x1, y1, x2, y2, strength);
-		drawLine(x2, y2, x3, y3, strength);
-		drawLine(x3, y3, x4, y4, strength);
-		drawLine(x4, y4, x1, y1, strength);
+		g2.drawLine(x1, y1, x2, y2, strength);
+		g2.drawLine(x2, y2, x3, y3, strength);
+		g2.drawLine(x3, y3, x4, y4, strength);
+		g2.drawLine(x4, y4, x1, y1, strength);
 	}
 	
 	public static inline function fillRect2(x:Float, y:Float, width:Float, height:Float, angle:Float = 0, centerX:Float = null, centerY:Float = null):Void
@@ -233,8 +239,8 @@ class Painter
 		var x4 = cos * (x - centerX) - sin * (y + height - centerY) + centerX;
 		var y4 = sin * (x - centerX) + cos * (y + height - centerY) + centerY;
 		
-		fillTriangle(x1, y1, x2, y2, x3, y3);
-		fillTriangle(x3, y3, x4, y4, x1, y1);
+		g2.fillTriangle(x1, y1, x2, y2, x3, y3);
+		g2.fillTriangle(x3, y3, x4, y4, x1, y1);
 	}
 	
 	// draws a cross with center at x/y
@@ -251,15 +257,17 @@ class Painter
 		x -= width / 2;
 		y -= height / 2;
 		
-		drawLine(x, y, x + width, y + height, strength);
-		drawLine(x + width, y, x, y + height, strength);
+		g2.drawLine(x, y, x + width, y + height, strength);
+		g2.drawLine(x + width, y, x, y + height, strength);
 	}
 	
 	public static inline function drawString(text: String, x: Float, y: Float, scaleCenterX: Float = 0.0, scaleCenterY: Float = 0.0)
 	{
 		x = (x - Screen.halfWidth) * camera.fullScaleX + Screen.halfWidth;
 		y = (y - Screen.halfHeight) * camera.fullScaleY + Screen.halfHeight;
-		painter.drawString(text, x, y, Painter.scaleX * camera.fullScaleX, Painter.scaleY * camera.fullScaleY, scaleCenterX, scaleCenterY);
+		//g2.drawString(text, x, y, Painter.scaleX * camera.fullScaleX, Painter.scaleY * camera.fullScaleY, scaleCenterX, scaleCenterY);
+		// TODO: implement scale/rotation
+		g2.drawString(text, x, y);
 	}
 	
 	public static inline function drawLine2(x1: Float, y1: Float, x2: Float, y2: Float, strength: Float = 1.0)
@@ -270,7 +278,7 @@ class Painter
 		x2 = (x2 - Screen.halfWidth) * Painter.scaleX + Screen.halfWidth;
 		y2 = (y2 - Screen.halfHeight) * Painter.scaleY + Screen.halfHeight;
 		
-		painter.drawLine(x1, y1, x2, y2, strength);
+		g2.drawLine(x1, y1, x2, y2, strength);
 	}
 	
 	public static inline function set(color:Color, alpha:Float, font:Font = null):Void
@@ -287,20 +295,17 @@ class Painter
 		Painter.scaleY = scaleY;
 	}
 	
-	public static inline function clear() { painter.clear(); }
-		
-	private static inline function set_color(value:Color) { painter.setColor(value); return value; }
-	private static inline function get_alpha() { return painter.get_opacity(); }
-	private static inline function set_alpha(value:Float) { return painter.set_opacity(value); }
-	private static inline function set_font(value:Font) { painter.setFont(value); return value; }
+	private static inline function set_framebuffer(value:Framebuffer):Framebuffer
+	{
+		g2 = value.g2;
+		g4 = value.g4;
+		return value;
+	}
 	
-	private static inline function drawImage(image: Image, x: Float, y: Float) { painter.drawImage(image, x, y); }
-	private static inline function drawImage2(image: Image, sx: Float, sy: Float, sw: Float, sh: Float, dx: Float, dy: Float, dw: Float, dh: Float, ?angle, ?ox, ?oy) { painter.drawImage2(image, sx, sy, sw, sh, dx, dy, dw, dh, angle, ox, oy); }
-	private static inline function drawRect(x: Float, y: Float, width: Float, height: Float, strength: Float = 1.0) { painter.drawRect(x, y, width, height, strength); }
-	private static inline function fillRect(x: Float, y: Float, width: Float, height: Float) { painter.fillRect(x, y, width, height); }
-	private static inline function drawChars(text: String, offset: Int, length: Int, x: Float, y: Float) { painter.drawChars(text, offset, length, x, y); }
-	private static inline function drawLine(x1: Float, y1: Float, x2: Float, y2: Float, strength: Float = 1.0) { painter.drawLine(x1, y1, x2, y2, strength); }
-	private static inline function drawVideo(video: Video, x: Float, y: Float, width: Float, height: Float) { painter.drawVideo(video, x, y, width, height); }
-	private static inline function fillTriangle(x1: Float, y1: Float, x2: Float, y2: Float, x3: Float, y3: Float) { painter.fillTriangle(x1, y1, x2, y2, x3, y3); }
-	private static inline function translate(x: Float, y: Float) { painter.translate(x, y); }
+	public static inline function clear() { g2.clear(); }
+		
+	private static inline function set_color(value:Color) { return g2.color = value; }
+	private static inline function get_alpha() { return g2.opacity; }
+	private static inline function set_alpha(value:Float) { return g2.opacity = value; }
+	private static inline function set_font(value:Font) { return g2.font = value; }
 }

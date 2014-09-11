@@ -106,28 +106,27 @@ class Collider extends Component
 		shape.scaleY = transform.scaleY;
 	}
 	
-	private inline function set_type(value:String):String
+	private function set_type(value:String):String
 	{
 		if (value != type)
 		{
 			if (value == null)
 			{
 				trace("Collider.type can't be set to null.");
-				return null;
 			}
 			else
 			{
 				typeColliders.remove(type);
 				type = value;
-				var colliders = typeColliders[value];
-				if (colliders != null)
+				var existingColliders = typeColliders[value];
+				if (existingColliders != null)
 				{
-					colliders.push(this);
+					existingColliders.push(this);
 				}
 				else
 				{
-					colliders = new Array();
-					colliders.push(this);
+					existingColliders = new Array();
+					existingColliders.push(this);
 					typeColliders[value] = colliders;
 				}
 			}
