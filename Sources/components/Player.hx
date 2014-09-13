@@ -1,26 +1,26 @@
 package components;
 
 import kha.Key;
-import komponent.components.Physics;
 
 import komponent.physics.CollisionData2D;
 
+import komponent.Component;
 import komponent.GameObject;
+import komponent.components.Physics;
 import komponent.components.physics.Hitbox;
 import komponent.components.graphic.Animation;
 import komponent.components.combat.Health;
 import komponent.input.Keyboard;
 import komponent.input.Input;
-import komponent.input.Input.AxisInput;
+import komponent.input.Input;
 import komponent.utils.Screen;
 import komponent.utils.Misc;
-import komponent.Component;
 import komponent.utils.Time;
 
 class Player extends Component
 {
 	
-	public var movementSpeed:Float = 200;
+	public var movementSpeed:Float = 2000;
 	
 	private var animation:Animation;
 	private var physics:Physics;
@@ -47,7 +47,9 @@ class Player extends Component
 		
 		physics = addComponent(Physics);
 		physics.moveByTypes.push("ground");
-		physics.elasticityY = 0.8;
+		physics.maxVelocity = VelocityLimit.REALISTIC(200);
+		physics.dragX = 400;
+		physics.dragY = 400;
 		
 		addComponent(Health);
 	}
@@ -59,16 +61,13 @@ class Player extends Component
 	
 	private function handleInput()
 	{
-		var deltaX = Input.getAxis("horizontal") * movementSpeed * Time.elapsed;
-		var deltaY = Input.getAxis("vertical") * movementSpeed * Time.elapsed;
-		
-		physics.moveBy(deltaX, deltaY);
+		physics.accelerationX = Input.getAxis("horizontal") * movementSpeed;
+		physics.accelerationY = Input.getAxis("vertical") * movementSpeed;
 	}
 	
 	private function onCollision(collision:CollisionData2D)
 	{
-		var separation = collision.separation;
-		trace(collision.collider1.gameObject.name + ", " + collision.collider2.gameObject.name +  ": " + collision.event);
+		
 	}
 	
 }

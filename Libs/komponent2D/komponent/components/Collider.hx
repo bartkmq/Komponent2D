@@ -127,7 +127,7 @@ class Collider extends Component
 				{
 					existingColliders = new Array();
 					existingColliders.push(this);
-					typeColliders[value] = colliders;
+					typeColliders[value] = existingColliders;
 				}
 			}
 		}

@@ -64,4 +64,13 @@ class Misc
 		if (value < min) value = min;
 		return value;
 	}
+	
+	// clamps a absolute value in a specific range
+	public static inline function clampAbs(value:Float, max:Float):Float
+	{
+		var sign = (value >= 0) ? 1 : -1;
+		value = Math.abs(value);
+		if (value > max) value = max;
+		return value * sign;
+	}
 }

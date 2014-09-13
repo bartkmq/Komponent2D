@@ -6,37 +6,36 @@ using komponent.utils.Misc;
  * A Signal<M> can bind one or more callback functions that will be
  * called with messages of type M.
  * Typically M is some type of event that will be passed to the callback.
- */ 
+ */
+
 class Signal<M>
 {
-	public var callbacks:Array<(M->Void)>;
+	
+	public var listeners:Array<M->Void>;
 
 	public function new()
 	{
-		callbacks = [];
+		listeners = [];
 	}
 
 	public function add(callback:M->Void)
 	{
-		// add callback if it's not already added
-		if (callbacks.indexOf(callback) == -1)
-		{
-			callbacks.push(callback);
-		}
+		if (listeners.contains(callback))
+			listeners.push(callback);
 	}
 
 	public function remove(callback:M->Void)
 	{
-		callbacks.remove(callback);
+		listeners.remove(callback);
 	}
 
 	public function clear()
 	{
-		callbacks.clear();
+		listeners.clear();
 	}
 
 	public function dispatch(message:M)
 	{
-		for (callback in callbacks) callback(message);
+		for (callback in listeners) callback(message);
 	}
 }

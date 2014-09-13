@@ -9,14 +9,12 @@ import kha.Font;
 import kha.Video;
 import kha.Framebuffer;
 
-import hxcollision.shapes.Polygon in hxPolygon;
-
 import komponent.components.misc.Camera;
 
 class Painter
 {
 	
-	public static var framebuffer(never, set):Framebuffer;
+	public static var backbuffer(never, set):Image;
 	public static var g2(default, null):Graphics2;
 	public static var g4(default, null):Graphics4;
 	
@@ -295,7 +293,7 @@ class Painter
 		Painter.scaleY = scaleY;
 	}
 	
-	private static inline function set_framebuffer(value:Framebuffer):Framebuffer
+	private static inline function set_backbuffer(value:Image):Image
 	{
 		g2 = value.g2;
 		g4 = value.g4;

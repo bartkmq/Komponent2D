@@ -3,6 +3,7 @@ package scene;
 import kha.Button;
 import kha.Color;
 import kha.Key;
+import kha.math.Vector2;
 
 import komponent.GameObject;
 import komponent.Scene;
@@ -29,18 +30,17 @@ class GameScene extends Scene
 	{				
 		new GameObject("Camera", 0, 0).addComponent(Camera);
 		
-		Keyboard.define("restart", ["r"]);
-		Keyboard.define("debug", ["d"]);
+		Keyboard.define("restart", ["r"], [Key.CTRL], true);
+		Keyboard.define("debug", ["d"], [Key.CTRL], true);
 		
 		Screen.color = Color.fromString("#57A2DF");
 		
-		player = new GameObject("Player", 200, 200);
+		player = new GameObject("Player", 200, 200, "player");
 		player.addComponent(Player);
 		
 		ground = new GameObject("Ground", Screen.halfWidth, Screen.bottom - 10, "ground");
 		var hitbox = ground.addComponent(Hitbox);
 		hitbox.setSize(Screen.width, 10);
-		trace("");
 	}
 	
 	override public function update()
@@ -53,9 +53,6 @@ class GameScene extends Scene
 			
 		if (Mouse.wheel)
 			Screen.camera.zoom += Mouse.wheelDelta * 0.01;
-			
-		//trace(player.transform.x, player.transform.y);
-		//trace(player.collider.shape.x, player.collider.shape.y);
 	}
 	
 }
