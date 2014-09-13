@@ -21,7 +21,7 @@ class Component
 	private var collider(get, null):Collider;
 	
 	/**
-	* Called when this component is added to a GameObject.
+	* Called after this component is added to a GameObject.
 	*/
 	public function added():Void { }
 	
@@ -36,7 +36,7 @@ class Component
 	public function debugDraw():Void { }
 	
 	/**
-	* Called when this component is removed from a GameObject.
+	* Called before this component is removed from a GameObject.
 	*/	
 	public function removed():Void { }
 	
@@ -130,7 +130,7 @@ class Component
 	 * @param	functionName	Name of the function to call.
 	 * @param	message			Dynamic object to pass to the function.
 	 */
-	public inline function sendMessage(functionName:String, message:Dynamic = null)
+	private inline function sendMessage(functionName:String, message:Dynamic = null)
 	{
 		gameObject.sendMessage(functionName, message);
 	}

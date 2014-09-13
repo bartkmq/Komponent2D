@@ -17,6 +17,7 @@ class Scene
 	* -> onGameObjectAdded(gameObject) when a GameObject is added to this scene.
 	* -> onGameObjectRemoved(gameObject) when a GameObject is removed from this scene.
 	* -> onQuit() when the game is quit
+	* -> onSceneChanged() when this scene is removed.
 	*/
 	
 	public var engine:Engine;
@@ -90,6 +91,7 @@ class Scene
 			Painter.color = Screen.color;
 			Painter.clear();
 		}
+		
 		for (graphic in graphics)
 		{
 			if (graphic.visible && graphic.gameObject.active)
@@ -98,9 +100,8 @@ class Scene
 		for (extension in extensions)
 		{
 			extension.render();
-			if (engine.debug)
-				extension.debugDraw();
 		}
+		
 		if (engine.debug)
 		{
 			for (gameObject in gameObjects)
@@ -108,7 +109,12 @@ class Scene
 				if (gameObject.active)
 					gameObject.debugDraw();
 			}
+			for (extension in extensions)
+			{
+				extension.debugDraw();
+			}
 		}
+		
 	}
 	
 	public inline function remove(gameObject:GameObject):GameObject

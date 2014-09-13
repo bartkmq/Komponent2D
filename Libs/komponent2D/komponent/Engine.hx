@@ -1,12 +1,14 @@
 package komponent;
 
 import yaml.Parser;
-import yaml.Renderer;
 import yaml.Yaml;
 
+import kha.Sys;
+import kha.Image;
 import kha.Configuration;
 import kha.Game;
 import kha.Loader;
+import kha.Scaler;
 import kha.LoadingScreen;
 import kha.Scheduler;
 import kha.Framebuffer;
@@ -19,7 +21,7 @@ import komponent.input.Input;
 
 using komponent.utils.Misc;
 
-@:keepSub
+@:keep
 class Engine extends Game
 {
 	
@@ -33,6 +35,8 @@ class Engine extends Game
 	
 	// Config
 	public var config:Dynamic;
+	
+	public var backbuffer:Image;
 	
 	/**
 	 * Constructor. Can be used to set the name of this game and to load Rooms.
@@ -113,6 +117,9 @@ class Engine extends Game
 		}		
 		_startScene = null;
 		
+		// create backbuffer for rendering
+		backbuffer = Image.createRenderTarget(width, height);
+		
 		Configuration.setScreen(this);
 	}
 	
@@ -122,18 +129,24 @@ class Engine extends Game
 		
 		currentScene.update();
 		Input.update();
-		
 		Time.frames++;
+		
 		Time.stop("updating");
 	}
 	
 	override public function render(framebuffer:Framebuffer):Void
 	{
 		Time.start("rendering");
-		startRender(framebuffer);
-		Painter.framebuffer = framebuffer;
+		
+		backbuffer.g2.begin();
+		Painter.backbuffer = backbuffer;
 		currentScene.render();
+		backbuffer.g2.end();
+		
+		startRender(framebuffer);
+		Scaler.scale(backbuffer, framebuffer, Sys.screenRotation);
 		endRender(framebuffer);
+		
 		Time.stop("rendering");
 	}
 	
@@ -152,7 +165,10 @@ class Engine extends Game
 	private inline function set_currentScene(value:Scene):Scene
 	{
 		if (currentScene != null)
+		{
+			currentScene.sendMessage("onSceneChanged");
 			currentScene.end();
+		}
 		if (currentScene == value)
 			return value;
 			
