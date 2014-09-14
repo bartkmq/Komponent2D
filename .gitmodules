@@ -8,3 +8,6 @@
 [submodule "Libs/hxcollision"]
 	path = Libs/hxcollision
 	url = https://github.com/underscorediscovery/hxcollision.git
+[submodule "Libs/compiletime"]
+	path = Libs/compiletime
+	url = https://github.com/jasononeil/compiletime.git

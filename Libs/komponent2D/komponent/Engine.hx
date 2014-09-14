@@ -13,6 +13,10 @@ import kha.LoadingScreen;
 import kha.Scheduler;
 import kha.Framebuffer;
 
+#if debug
+import CompileTime;
+#end
+
 import komponent.utils.Misc;
 import komponent.utils.Time;
 import komponent.utils.Painter;
@@ -66,6 +70,10 @@ class Engine extends Game
 			_loadingScreen = LoadingScreen;
 		else
 			_loadingScreen = loadingScreen;
+			
+		#if debug
+		CompileTime.importPackage("komponent");
+		#end
 	}
 	
 	override public function init():Void
@@ -138,6 +146,8 @@ class Engine extends Game
 	{
 		Time.start("rendering");
 		
+		backbuffer.g2.color = Screen.color;
+		backbuffer.g2.opacity = 1;
 		backbuffer.g2.begin();
 		Painter.backbuffer = backbuffer;
 		currentScene.render();
