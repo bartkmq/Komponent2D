@@ -4,6 +4,7 @@ import komponent.components.Graphic;
 import komponent.utils.Misc;
 import komponent.utils.Painter;
 import komponent.utils.Screen;
+import komponent.ds.Matrix;
 
 using komponent.utils.Misc;
 
@@ -85,13 +86,7 @@ class Scene
 	* Called when this scene should render.
 	*/
 	public function render():Void
-	{
-		if (Screen.color != null)
-		{
-			Painter.color = Screen.color;
-			Painter.clear();
-		}
-		
+	{		
 		for (graphic in graphics)
 		{
 			if (graphic.visible && graphic.gameObject.active)

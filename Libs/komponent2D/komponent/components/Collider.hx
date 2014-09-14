@@ -38,11 +38,6 @@ class Collider extends Component
 		type = gameObject.type;
 	}
 	
-	override public function update()
-	{
-		
-	}
-	
 	override public function removed()
 	{
 		Collider.colliders.remove(this);

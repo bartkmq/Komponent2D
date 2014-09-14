@@ -5,7 +5,6 @@ import kha.Font;
 import kha.FontStyle;
 import kha.Loader;
 
-import komponent.components.Graphic;
 import komponent.utils.Painter;
 import komponent.utils.Screen;
 
@@ -41,9 +40,10 @@ class Text extends Graphic
 			Painter.set(color, alpha, font);
 			for (camera in Screen.cameras)
 			{
-				Painter.camera = camera;
-				Painter.drawString(text, transform.x - Screen.camera.x, transform.y - Screen.camera.y);
+				Painter.matrix = transform.matrix * camera.matrix;
+				Painter.drawString(text, 0, 0);
 			}
+			Painter.matrix = null;
 		}
 	}
 	

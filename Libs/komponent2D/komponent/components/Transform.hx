@@ -5,6 +5,9 @@ import kha.Color;
 import komponent.GameObject;
 import komponent.utils.Painter;
 import komponent.utils.Screen;
+import komponent.utils.Misc;
+import komponent.ds.Matrix;
+import komponent.components.misc.Camera;
 
 using komponent.utils.Parser;
 
@@ -25,6 +28,8 @@ class Transform extends Component
 	
 	public var scaleX(default, null):Float;
 	public var scaleY(default, null):Float;
+	
+	public var matrix(get, null):Matrix;
 	
 	/**
 	 * Variables starting with "local" are the offset of this Transform to it's parent.
@@ -62,12 +67,16 @@ class Transform extends Component
 	
 	override public function debugDraw()
 	{
-		Painter.set(Color.fromBytes(0, 0, 255), 1);
-		for (camera in Screen.cameras)
-		{
-			Painter.camera = camera;
-			Painter.drawCross(x, y, 10, 10, 2);
-		}
+		//if (!hasComponent(Camera))
+		//{
+			Painter.set(Color.fromBytes(0, 0, 255), 1);
+			for (camera in Screen.cameras)
+			{
+				Painter.matrix = transform.matrix * camera.matrix;
+				Painter.drawCross(x, y, 10, 10, 2);
+			}
+			Painter.matrix = null;
+		//}
 	}
 	
 	public inline function setPos(x:Float, y:Float):Void
@@ -134,6 +143,7 @@ class Transform extends Component
 	private function updateWorldTransformation()
 	{
 		resetWorld();
+		matrix = null;
 		var current:Transform = this;
 		while (current != null)
 		{
@@ -146,11 +156,7 @@ class Transform extends Component
 			current = current.parent;
 		}
 		sendMessage("onTransformChange", this);
-		updateChildrensWorldTransformations();
-	}
-	
-	private function updateChildrensWorldTransformations()
-	{
+		
 		for (child in children)
 			child.updateWorldTransformation();
 	}
@@ -195,4 +201,15 @@ class Transform extends Component
 	
 	private inline function set_localScaleX(value:Float):Float { localScaleX = value; updateWorldTransformation(); return value; }
 	private inline function set_localScaleY(value:Float):Float { localScaleY = value; updateWorldTransformation(); return value; }
+	
+	private function get_matrix():Matrix
+	{
+		if (matrix == null)
+		{
+			matrix = Matrix.translation(x, y) *
+					 Matrix.rotation(rotation * Misc.toRad) *
+					 Matrix.scale(scaleX, scaleY);
+		}
+		return matrix;
+	}
 }

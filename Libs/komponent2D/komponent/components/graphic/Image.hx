@@ -65,12 +65,12 @@ class Image extends Graphic
 			Painter.set(color, alpha);
 			for (camera in Screen.cameras)
 			{
-				
-				Painter.camera = camera;
-				Painter.setScale(transform.localScaleX, transform.localScaleY);
-				Painter.drawImage5(_image, transform.x, transform.y, transform.rotation, 0, 0,
-									flipX, flipY, sourceRect, tiledWidth, tiledHeight, fillScreen);
+				Painter.matrix = transform.matrix * camera.matrix;
+				Painter.drawImage5(_image, 0, 0, flipX, flipY, sourceRect,
+									tiledWidth, tiledHeight, fillScreen);
+				//Painter.drawImage(_image, 0, 0);
 			}
+			Painter.matrix = null;
 		}
 	}
 	

@@ -27,10 +27,10 @@ class Player extends Component
 
 	override public function added() 
 	{		
-		Keyboard.define("up", ["w"], [Key.UP]);
-		Keyboard.define("down", ["s"], [Key.DOWN]);
-		Keyboard.define("left", ["a"], [Key.LEFT]);
-		Keyboard.define("right", ["d"], [Key.RIGHT]);
+		Keyboard.define("up", [Key.UP]);
+		Keyboard.define("down", [Key.DOWN]);
+		Keyboard.define("left", [Key.LEFT]);
+		Keyboard.define("right", [Key.RIGHT]);
 		
 		Input.defineAxis("horizontal", [KEYBOARD("left", -1), KEYBOARD("right", 1)]);
 		Input.defineAxis("vertical", [KEYBOARD("up", -1), KEYBOARD("down", 1)]);

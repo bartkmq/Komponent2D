@@ -1,7 +1,11 @@
 package komponent.components.physics;
 
+import kha.Color;
+
 import komponent.components.Collider;
 import komponent.utils.Painter;
+import komponent.utils.Screen;
+import komponent.utils.Misc;
 
 class Circle extends Collider
 {
@@ -16,7 +20,13 @@ class Circle extends Collider
 	
 	override public function debugDraw():Void
 	{	
-		Painter.drawCircle(x, y, radius);
+		Painter.set(Color.White, 1);
+		for (camera in Screen.cameras)
+		{
+			Painter.matrix = transform.matrix * camera.matrix;
+			Painter.drawCircle(0, 0, radius);
+		}
+		Painter.matrix = null;
 	}
 	
 	public inline function setRadius(radius:Float):Void

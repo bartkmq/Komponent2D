@@ -1,10 +1,14 @@
 package komponent.components.physics;
 
+import kha.Color;
+
 import hxcollision.shapes.Polygon in HxPolygon;
 
 import komponent.components.Collider;
 import komponent.utils.Painter;
 import komponent.ds.Point;
+import komponent.utils.Screen;
+import komponent.utils.Misc;
 
 class Polygon extends Collider
 {
@@ -12,33 +16,30 @@ class Polygon extends Collider
 	override public function added()
 	{
 		super.added();
-		setToRegularPolygon(25, 25, 5);
+		setToRegularPolygon(25, 5);
 	}
 	
 	override public function debugDraw()
 	{
 		var vertices:Array<Point> = cast(shape, HxPolygon).transformedVertices;
-		var i = 0;
-		var v0 = vertices[i++];
-		var v1 = v0;
 		
-		while (vertices[i] != null)
+		Painter.set(Color.White, 1);
+		for (camera in Screen.cameras)
 		{
-			var v2 = vertices[i++];
-			Painter.drawLine2(v1.x, v1.y, v2.x, v2.y, 1);
-			v1 = v2;
+			Painter.matrix = camera.matrix;
+			Painter.drawPolygon(0, 0, Misc.pointsToVector2(vertices));
 		}
-		Painter.drawLine2(v1.x, v1.y, v0.x, v0.y, 1);
+		Painter.matrix = null;
 	}
 	
 	public function setVertices(vertices:Array<Point>):Void
 	{
-		shape = new hxPolygon(transform.x, transform.y, vertices);
+		shape = new HxPolygon(transform.x, transform.y, vertices);
 	}
 	
 	public function setToRegularPolygon(radius:Float, edges:Int):Void
 	{
-		shape = new hxPolygon.create(transform.x, transform.y, radius, edges);
+		shape = HxPolygon.create(transform.x, transform.y, edges, radius);
 	}
 	
 	override public function loadConfig(data:Dynamic)

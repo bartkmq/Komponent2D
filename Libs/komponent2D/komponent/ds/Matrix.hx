@@ -1,11 +1,4 @@
 package komponent.ds;
 
-class Matrix
-{
+typedef Matrix = kha.math.Matrix3;
 
-	public function new() 
-	{
-		
-	}
-	
-}
