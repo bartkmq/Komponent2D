@@ -1,5 +1,7 @@
 package komponent.components;
 
+import kha.Color;
+
 import hxcollision.Collision;
 import hxcollision.shapes.Ray;
 import hxcollision.shapes.Shape;
@@ -7,6 +9,9 @@ import hxcollision.shapes.Shape;
 import komponent.physics.CollisionData2D;
 import komponent.physics.RaycastData2D;
 import komponent.physics.CollisionEvent;
+import komponent.utils.Painter;
+import komponent.utils.Misc;
+import komponent.utils.Screen;
 import komponent.ds.Point;
 
 using komponent.utils.Parser;
@@ -36,6 +41,20 @@ class Collider extends Component
 		gameObject.colliders.push(this);
 		active = true;
 		type = gameObject.type;
+	}
+	
+	override public function debugDraw()
+	{
+		//var vertices:Array<Point> = cast(shape, HxPolygon).transformedVertices;
+		var vertices:Array<Point> = cast(shape, HxPolygon).vertices;
+		
+		Painter.set(Color.White, 1);
+		for (camera in Screen.cameras)
+		{
+			Painter.matrix = transform.matrix * camera.matrix;
+			Painter.drawPolygon(0, 0, Misc.pointsToVector2(vertices));
+		}
+		Painter.matrix = null;
 	}
 	
 	override public function removed()

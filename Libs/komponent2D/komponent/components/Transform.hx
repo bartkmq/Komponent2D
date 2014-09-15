@@ -67,16 +67,16 @@ class Transform extends Component
 	
 	override public function debugDraw()
 	{
-		//if (!hasComponent(Camera))
-		//{
+		if (!hasComponent(Camera))
+		{
 			Painter.set(Color.fromBytes(0, 0, 255), 1);
 			for (camera in Screen.cameras)
 			{
 				Painter.matrix = transform.matrix * camera.matrix;
-				Painter.drawCross(x, y, 10, 10, 2);
+				Painter.drawCross(0, 0, 10, 10, 2);
 			}
 			Painter.matrix = null;
-		//}
+		}
 	}
 	
 	public inline function setPos(x:Float, y:Float):Void
@@ -206,9 +206,11 @@ class Transform extends Component
 	{
 		if (matrix == null)
 		{
-			matrix = Matrix.translation(x, y) *
+			matrix = Matrix.translation(Screen.halfWidth, Screen.halfHeight) *
+					 Matrix.scale(scaleX, scaleY) *
 					 Matrix.rotation(rotation * Misc.toRad) *
-					 Matrix.scale(scaleX, scaleY);
+					 Matrix.translation(x, y) *
+					 Matrix.translation( -Screen.halfWidth, -Screen.halfHeight);
 		}
 		return matrix;
 	}

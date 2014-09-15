@@ -4,12 +4,6 @@ import kha.Color;
 
 import komponent.components.graphic.Image;
 import komponent.components.Collider;
-import komponent.utils.Painter;
-import komponent.ds.Point;
-import komponent.ds.Matrix;
-import komponent.utils.Screen;
-import komponent.utils.Misc;
-import komponent.components.misc.Camera;
 
 class Hitbox extends Collider
 {
@@ -21,20 +15,6 @@ class Hitbox extends Collider
 	{
 		super.added();
 		setSize(50, 50);
-	}
-	
-	override public function debugDraw():Void
-	{
-		var vertices:Array<Point> = cast(shape, HxPolygon).transformedVertices;
-		//var vertices:Array<Point> = cast(shape, HxPolygon).vertices;
-		
-		Painter.set(Color.White, 1);
-		for (camera in Screen.cameras)
-		{
-			Painter.matrix = /*transform.matrix */ camera.matrix;
-			Painter.drawPolygon(0, 0, Misc.pointsToVector2(vertices));
-		}
-		Painter.matrix = null;
 	}
 	
 	public inline function setSize(width:Float, height:Float):Void

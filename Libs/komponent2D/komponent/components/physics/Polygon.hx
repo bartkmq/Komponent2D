@@ -5,10 +5,7 @@ import kha.Color;
 import hxcollision.shapes.Polygon in HxPolygon;
 
 import komponent.components.Collider;
-import komponent.utils.Painter;
 import komponent.ds.Point;
-import komponent.utils.Screen;
-import komponent.utils.Misc;
 
 class Polygon extends Collider
 {
@@ -17,19 +14,6 @@ class Polygon extends Collider
 	{
 		super.added();
 		setToRegularPolygon(25, 5);
-	}
-	
-	override public function debugDraw()
-	{
-		var vertices:Array<Point> = cast(shape, HxPolygon).transformedVertices;
-		
-		Painter.set(Color.White, 1);
-		for (camera in Screen.cameras)
-		{
-			Painter.matrix = camera.matrix;
-			Painter.drawPolygon(0, 0, Misc.pointsToVector2(vertices));
-		}
-		Painter.matrix = null;
 	}
 	
 	public function setVertices(vertices:Array<Point>):Void

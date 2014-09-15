@@ -49,10 +49,10 @@ class GameScene extends Scene
 		
 		Screen.color = Color.fromString("#57A2DF");
 		
-		player = new GameObject("Player", 200, 200, "player");
+		player = new GameObject("Player", 0, 0, "player");
 		player.addComponent(Player);
 		
-		ground = new GameObject("Ground", Screen.halfWidth, Screen.bottom - 10, "ground");
+		ground = new GameObject("Ground", 0, Screen.bottom - 10, "ground");
 		var hitbox = ground.addComponent(Hitbox);
 		hitbox.setSize(Screen.width, 10);
 		
@@ -71,12 +71,12 @@ class GameScene extends Scene
 		if (Keyboard.check("debug"))
 			engine.debug = !engine.debug;
 			
-		Screen.camera.x += Input.getAxis("camera_horizontal") * 1;
-		Screen.camera.y += Input.getAxis("camera_vertical") * 1;
-		Screen.camera.gameObject.transform.localRotation += Input.getAxis("camera_rotation") * 0.5;
+		Screen.camera.x += Input.getAxis("camera_horizontal") * 10;
+		Screen.camera.y += Input.getAxis("camera_vertical") * 10;
+		Screen.camera.gameObject.transform.localRotation += Input.getAxis("camera_rotation") * 5;
 			
 		if (Mouse.wheel)
-			Screen.camera.zoom += Mouse.wheelDelta * 0.01;
+			Screen.camera.zoom += Mouse.wheelDelta * 0.1;
 	}
 	
 }

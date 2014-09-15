@@ -31,9 +31,12 @@ class Player extends Component
 		Keyboard.define("down", [Key.DOWN]);
 		Keyboard.define("left", [Key.LEFT]);
 		Keyboard.define("right", [Key.RIGHT]);
+		Keyboard.define("rotate_left", ["y"]);
+		Keyboard.define("rotate_right", ["x"]);
 		
 		Input.defineAxis("horizontal", [KEYBOARD("left", -1), KEYBOARD("right", 1)]);
 		Input.defineAxis("vertical", [KEYBOARD("up", -1), KEYBOARD("down", 1)]);
+		Input.defineAxis("rotation", [KEYBOARD("rotate_left", -1), KEYBOARD("rotate_right", 1)]);
 		
 		animation = addComponent(Animation);
 		animation.loadSpritemap("player_default", 16, 26);
@@ -63,6 +66,7 @@ class Player extends Component
 	{
 		physics.accelerationX = Input.getAxis("horizontal") * movementSpeed;
 		physics.accelerationY = Input.getAxis("vertical") * movementSpeed;
+		transform.localRotation += Input.getAxis("rotation");
 	}
 	
 	private function onCollision(collision:CollisionData2D)
