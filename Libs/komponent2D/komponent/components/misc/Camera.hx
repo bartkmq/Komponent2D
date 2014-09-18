@@ -90,9 +90,9 @@ class Camera extends Component
 	{
 		if (matrix == null)
 		{
-			matrix = Matrix.translation(Screen.halfWidth + x, Screen.halfHeight + y) *
-					 Matrix.scale(fullScaleX, fullScaleY) *
-					 Matrix.rotation(transform.rotation * Misc.toRad);
+			matrix = Matrix.scale(fullScaleX, fullScaleY) *
+					 Matrix.rotation(transform.rotation * Misc.toRad) *
+					 Matrix.translation(x, y);
 		}
 		return matrix;
 	}

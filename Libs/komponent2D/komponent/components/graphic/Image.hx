@@ -63,12 +63,13 @@ class Image extends Graphic
 		if (visible && _image != null)
 		{
 			Painter.set(color, alpha);
+			
 			for (camera in Screen.cameras)
 			{
-				Painter.matrix = transform.matrix * camera.matrix;
-				Painter.drawImage5(_image, 0, 0, flipX, flipY, sourceRect,
+				Painter.matrix = camera.matrix * transform.matrix;
+				
+				Painter.drawScaledTiledSubImage(_image, 0, 0, flipX, flipY, sourceRect,
 									tiledWidth, tiledHeight, fillScreen);
-				//Painter.drawImage(_image, 0, 0);
 			}
 			Painter.matrix = null;
 		}

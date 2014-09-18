@@ -206,11 +206,9 @@ class Transform extends Component
 	{
 		if (matrix == null)
 		{
-			matrix = Matrix.translation(Screen.halfWidth, Screen.halfHeight) *
-					 Matrix.scale(scaleX, scaleY) *
+			matrix = Matrix.scale(scaleX, scaleY) *
 					 Matrix.rotation(rotation * Misc.toRad) *
-					 Matrix.translation(x, y) *
-					 Matrix.translation( -Screen.halfWidth, -Screen.halfHeight);
+					 Matrix.translation(x, y);
 		}
 		return matrix;
 	}
