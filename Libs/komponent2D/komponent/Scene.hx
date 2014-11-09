@@ -24,8 +24,6 @@ class Scene
 	public var gameObjects:Array<GameObject>;
 	public var graphics:Array<Graphic>;
 	public var names:Map<String, List<GameObject>>;
-	
-	public var extensions:Array<Extension>;
 
 	/**
 	* Constructor. Should have no arguments.
@@ -35,7 +33,6 @@ class Scene
 		gameObjects = [];
 		names = new Map();
 		graphics = [];
-		extensions = [];
 	}
 	
 	/**
@@ -76,8 +73,6 @@ class Scene
 			if (gameObject.active)
 				gameObject.update();
 		}
-		for (extension in extensions)
-			extension.update();
 	}
 	
 	/**
@@ -90,10 +85,6 @@ class Scene
 			if (graphic.visible && graphic.gameObject.active)
 				graphic.render();
 		}
-		for (extension in extensions)
-		{
-			extension.render();
-		}
 		
 		if (engine.debug)
 		{
@@ -101,10 +92,6 @@ class Scene
 			{
 				if (gameObject.active)
 					gameObject.debugDraw();
-			}
-			for (extension in extensions)
-			{
-				extension.debugDraw();
 			}
 		}
 		
@@ -178,23 +165,6 @@ class Scene
 	}
 	
 	/**
-	 * Returns a existing Extension or creates a new one.
-	 * @param	extension	The Extension type to return.
-	 * @return	The Extension instance.
-	 */
-	public function getExtension<T:Extension>(extensionType:Class<T>):T
-	{
-		for (extension in extensions)
-		{
-			if (Std.is(extension, extensionType))
-				return cast extension;
-		}
-		var newExtension:T = Type.createInstance(extensionType, []);
-		extensions.push(newExtension);
-		return newExtension;
-	}
-	
-	/**
 	 * Calls a function on all the components in the gameObjects in the scene.
 	 * @param	functionName The function to call.
 	 * @param	The Dynamic Object to pass to the function.
@@ -203,8 +173,6 @@ class Scene
 	{
 		for (gameObject in gameObjects)
 			gameObject.sendMessage(functionName, message);
-		for (extension in extensions)
-			Misc.callFunction(extension, functionName, message);
 	}
 	
 	public function loadPrefab(data:Dynamic)
@@ -212,10 +180,6 @@ class Scene
 		for (objectData in cast(data.gameObjects, Array<Dynamic>))
 		{
 			GameObject.loadPrefab(objectData);
-		}
-		for (extension in cast(data.extensions, Array<Dynamic>))
-		{
-			getExtension(Type.resolveClass(extension));
 		}
 	}
 	

@@ -126,7 +126,7 @@ class Image extends Graphic
 		tiledWidth = data.tiledWidth.parse(0);
 		tiledHeight = data.tiledHeight.parse(0);
 		fillScreen = data.fillScreen.parse(false);
-		sourceRect = data.sourceRectangle.parseRect();
+		sourceRect = data.sourceRectangle.parseRect(null);
 	}
 	
 	private inline function get_width():Int { return (sourceRect == null) ? _image.width : Math.floor(sourceRect.width); }
