@@ -10,6 +10,7 @@ import komponent.physics.CollisionData2D;
 import komponent.physics.RaycastData2D;
 import komponent.physics.CollisionEvent;
 import komponent.utils.Painter;
+import komponent.utils.Painter2;
 import komponent.utils.Misc;
 import komponent.utils.Screen;
 import komponent.ds.Point;
@@ -51,10 +52,29 @@ class Collider extends Component
 		Painter.set(Color.White, 1);
 		for (camera in Screen.cameras)
 		{
-			Painter.matrix = transform.matrix * camera.matrix;
-			Painter.drawPolygon(0, 0, Misc.pointsToVector2(vertices));
+			if (!Painter.fallbackPainter)
+			{
+				Painter.matrix = transform.matrix * camera.matrix;
+				Painter.drawPolygon(0, 0, Misc.pointsToVector2(vertices));
+				Painter.matrix = null;
+			}
+			else
+			{
+				Painter2.camera = camera;
+				Painter2.drawCross(transform.x, transform.y, 10, 10, 2);
+				
+				var oldScale = new Point(shape.scaleX, shape.scaleY);
+				var oldRotation = shape.rotation;
+				
+				shape.scaleX = camera.fullScaleX;
+				shape.scaleY = camera.fullScaleY;
+				shape.rotation = camera.rotation * Misc.toRad;
+				Painter2.drawPolygon( -camera.x, -camera.y, Misc.pointsToVector2(cast(shape, HxPolygon).transformedVertices));
+				shape.scaleX = oldScale.x;
+				shape.scaleY = oldScale.y;
+				shape.rotation = oldRotation;
+			}
 		}
-		Painter.matrix = null;
 	}
 	
 	override public function removed()

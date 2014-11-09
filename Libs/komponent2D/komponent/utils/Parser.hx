@@ -11,8 +11,8 @@ using komponent.utils.Parser;
 class Parser
 {
 	
-	public static inline function parse<T>(data:Dynamic, defaultValue:T):T
-	{
+	public static function parse<T>(data:Dynamic, defaultValue:T):T
+	{	
 		return (data != null) ? data : defaultValue;
 	}
 	
@@ -23,16 +23,11 @@ class Parser
 		return defaultClass;
 	}
 	
-	public static inline function parseRect(data:Dynamic, x:Float = 0, y:Float = 0, width:Float = 0, height:Float = 0):Rectangle
+	public static inline function parseRect(data:Dynamic, defaultRect:Rectangle):Rectangle
 	{
-		var rect:Rectangle;
 		if (data != null)
-			rect = new Rectangle(data.x.parse(0.0), data.y.parse(0.0), data.width.parse(10.0), data.height.parse(10.0));
-		else if (x == 0 && y == 0 && width == 0 && height == 0)
-			rect = null;
-		else
-			rect = new Rectangle(x, y, width, height);
-		return rect;
+			defaultRect = new Rectangle(data.x.parse(0.0), data.y.parse(0.0), data.width.parse(10.0), data.height.parse(10.0));
+		return defaultRect;
 	}
 	
 	public static inline function parseFontStyle(data:Dynamic, defaultStyle:FontStyle):FontStyle

@@ -2,9 +2,7 @@ package komponent;
 
 import komponent.components.Graphic;
 import komponent.utils.Misc;
-import komponent.utils.Painter;
 import komponent.utils.Screen;
-import komponent.ds.Matrix;
 
 using komponent.utils.Misc;
 
@@ -221,7 +219,7 @@ class Scene
 		}
 	}
 	
-	public inline function addGraphic(graphic:Graphic):Void
+	public function addGraphic(graphic:Graphic):Void
 	{
 		if (graphics.length == 0)
 			graphics.push(graphic);

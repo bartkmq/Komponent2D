@@ -8,6 +8,7 @@ import kha.Color;
 import komponent.input.Mouse;
 import komponent.utils.Screen;
 import komponent.utils.Painter;
+import komponent.utils.Painter2;
 import komponent.components.graphic.Image;
 
 class Debug extends Component
@@ -34,11 +35,21 @@ class Debug extends Component
 			if (image != null)
 				width = image.width;
 			
+			Painter.set(Color.White, 1, font);
+			
 			for (camera in Screen.cameras)
 			{
-				Painter.matrix = transform.matrix * camera.matrix;
-				Painter.set(Color.White, 1, font);
-				Painter.drawString(gameObject.toString(), width + 10, 0);
+				if (!Painter.fallbackPainter)
+				{
+					Painter.matrix = camera.matrix * transform.matrix;
+					Painter.drawString(gameObject.toString(), width + 10, 0);
+					Painter.matrix = null;
+				}
+				else
+				{
+					Painter2.camera = camera;
+					Painter2.drawString(gameObject.toString(), transform.x - camera.x, transform.y - camera.y);
+				}
 			}
 		}
 	}

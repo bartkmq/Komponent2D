@@ -27,6 +27,8 @@ class Painter
 	
 	public static var matrix(get, set):Matrix;
 	
+	public static var fallbackPainter:Bool = false;
+	
 	public static inline function drawScaledTiledSubImage(image:Image, x:Float, y:Float, flipX:Bool = false, flipY:Bool = false, sourceRect:Rectangle = null, tiledWidth:Int = 0, tiledHeight:Int = 0, fillScreen:Bool = false):Void
 	{
 		var sx:Float, sy:Float, sw:Float, sh:Float, dw:Float, dh:Float;

@@ -4,6 +4,7 @@ import kha.Color;
 
 import komponent.GameObject;
 import komponent.utils.Painter;
+import komponent.utils.Painter2;
 import komponent.utils.Screen;
 import komponent.utils.Misc;
 import komponent.ds.Matrix;
@@ -72,10 +73,18 @@ class Transform extends Component
 			Painter.set(Color.fromBytes(0, 0, 255), 1);
 			for (camera in Screen.cameras)
 			{
-				Painter.matrix = transform.matrix * camera.matrix;
-				Painter.drawCross(0, 0, 10, 10, 2);
+				if (!Painter.fallbackPainter)
+				{
+					Painter.matrix = camera.matrix * transform.matrix;
+					Painter.drawCross(0, 0, 10, 10, 2);
+					Painter.matrix = null;
+				}
+				else
+				{
+					Painter2.camera = camera;
+					Painter2.drawCross(x, y, 10, 10, 2);
+				}
 			}
-			Painter.matrix = null;
 		}
 	}
 	

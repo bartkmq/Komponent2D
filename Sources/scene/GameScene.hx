@@ -19,6 +19,8 @@ import komponent.components.graphic.Text;
 import komponent.utils.Time;
 import komponent.input.Input;
 
+import komponent.utils.Config;
+
 import components.Player;
 
 class GameScene extends Scene
@@ -30,7 +32,9 @@ class GameScene extends Scene
 	public var config:Dynamic;
 
 	override public function begin()
-	{				
+	{
+		Config.load("example");
+		
 		new GameObject("Camera", 0, 0).addComponent(Camera);
 		
 		Keyboard.define("restart", ["r"], [Key.CTRL], true);
@@ -73,7 +77,7 @@ class GameScene extends Scene
 			
 		Screen.camera.x += Input.getAxis("camera_horizontal") * 10;
 		Screen.camera.y += Input.getAxis("camera_vertical") * 10;
-		Screen.camera.gameObject.transform.localRotation += Input.getAxis("camera_rotation") * 5;
+		Screen.camera.rotation += Input.getAxis("camera_rotation") * 5;
 			
 		if (Mouse.wheel)
 			Screen.camera.zoom += Mouse.wheelDelta * 0.1;

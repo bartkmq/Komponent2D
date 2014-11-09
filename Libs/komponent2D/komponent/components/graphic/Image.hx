@@ -7,6 +7,7 @@ import kha.Image in KhaImage;
 
 import komponent.components.Graphic;
 import komponent.utils.Painter;
+import komponent.utils.Painter2;
 import komponent.utils.Screen;
 
 using komponent.utils.Parser;
@@ -66,12 +67,22 @@ class Image extends Graphic
 			
 			for (camera in Screen.cameras)
 			{
-				Painter.matrix = camera.matrix * transform.matrix;
-				
-				Painter.drawScaledTiledSubImage(_image, 0, 0, flipX, flipY, sourceRect,
-									tiledWidth, tiledHeight, fillScreen);
+				if (!Painter.fallbackPainter)
+				{
+					Painter.matrix = camera.matrix * transform.matrix;
+					
+					Painter.drawScaledTiledSubImage(_image, 0, 0, flipX, flipY, sourceRect,
+										tiledWidth, tiledHeight, fillScreen);
+					Painter.matrix = null;
+				}
+				else
+				{
+					Painter2.camera = camera;
+					Painter2.setScale(transform.localScaleX, transform.localScaleY);
+					Painter2.drawImage5(_image, transform.x, transform.y, transform.rotation, 0, 0,
+										flipX, flipY, sourceRect, tiledWidth, tiledHeight, fillScreen);
+				}
 			}
-			Painter.matrix = null;
 		}
 	}
 	
@@ -118,6 +129,6 @@ class Image extends Graphic
 		sourceRect = data.sourceRectangle.parseRect();
 	}
 	
-	private inline function get_width():Int { return _image.width; }
-	private inline function get_height():Int { return _image.height; }
+	private inline function get_width():Int { return (sourceRect == null) ? _image.width : Math.floor(sourceRect.width); }
+	private inline function get_height():Int { return (sourceRect == null) ? _image.height : Math.floor(sourceRect.height); }
 }

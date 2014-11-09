@@ -11,6 +11,8 @@ class Camera extends Component
 	public var x(get, set):Float;
 	public var y(get, set):Float;
 	
+	public var rotation(get, set):Float;
+	
 	public var scaleX(default, set):Float = 1;
 	public var scaleY(default, set):Float = 1;
 	
@@ -50,6 +52,9 @@ class Camera extends Component
 	
 	private inline function get_y():Float { return transform.y; }
 	private inline function set_y(value:Float):Float { return transform.localY = value; }
+	
+	private inline function get_rotation():Float { return transform.rotation; }
+	private inline function set_rotation(value:Float):Float { return transform.localRotation = value; }
 	
 	private inline function set_scaleX(value:Float):Float
 	{

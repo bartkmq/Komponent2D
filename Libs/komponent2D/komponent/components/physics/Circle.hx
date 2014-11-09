@@ -4,6 +4,7 @@ import kha.Color;
 
 import komponent.components.Collider;
 import komponent.utils.Painter;
+import komponent.utils.Painter2;
 import komponent.utils.Screen;
 import komponent.utils.Misc;
 
@@ -23,8 +24,17 @@ class Circle extends Collider
 		Painter.set(Color.White, 1);
 		for (camera in Screen.cameras)
 		{
-			Painter.matrix = transform.matrix * camera.matrix;
-			Painter.drawCircle(0, 0, radius);
+			if (!Painter.fallbackPainter)
+			{
+				Painter.matrix = transform.matrix * camera.matrix;
+				Painter.drawCircle(0, 0, radius);
+			}
+			else
+			{
+				Painter2.camera = camera;
+				Painter2.drawCross(transform.x, transform.y, 10, 10, 2);
+				Painter2.drawCircle(transform.x, transform.y, radius);
+			}
 		}
 		Painter.matrix = null;
 	}

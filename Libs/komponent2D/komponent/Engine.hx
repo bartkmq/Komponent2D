@@ -20,6 +20,7 @@ import CompileTime;
 import komponent.utils.Misc;
 import komponent.utils.Time;
 import komponent.utils.Painter;
+import komponent.utils.Painter2;
 import komponent.utils.Screen;
 import komponent.input.Input;
 
@@ -150,6 +151,7 @@ class Engine extends Game
 		backbuffer.g2.opacity = 1;
 		backbuffer.g2.begin();
 		Painter.backbuffer = backbuffer;
+		Painter2.backbuffer = backbuffer;
 		currentScene.render();
 		backbuffer.g2.end();
 		
