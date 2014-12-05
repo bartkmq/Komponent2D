@@ -6,7 +6,6 @@ import kha.FontStyle;
 import kha.Loader;
 
 import komponent.utils.Painter;
-import komponent.utils.Painter2;
 import komponent.utils.Screen;
 
 using komponent.utils.Parser;
@@ -14,24 +13,15 @@ using komponent.utils.Parser;
 class Text extends Graphic
 {
 	
-	public var width(get, never):Float;
-	public var height(get, never):Float;
-	
 	public var text:String;
 	public var font:Font;
 	public var size(get, set):Float;
 	public var fontstyle(get, set):FontStyle;
 	
-	public var alpha:Float;
-	public var color:Color;
-	
-	
 	override public function added() 
 	{
 		super.added();
 		text = "";
-		alpha = 1;
-		color = Color.White;
 	}
 	
 	override public function render()
@@ -41,17 +31,9 @@ class Text extends Graphic
 			Painter.set(color, alpha, font);
 			for (camera in Screen.cameras)
 			{
-				if (!Painter.fallbackPainter)
-				{
-					Painter.matrix = camera.matrix * transform.matrix;
-					Painter.drawString(text, 0, 0);
-					Painter.matrix = null;
-				}
-				else
-				{
-					Painter2.camera = camera;
-					Painter2.drawString(text, transform.x - Screen.camera.x, transform.y - Screen.camera.y);
-				}
+				Painter.matrix = camera.matrix * matrix;
+				Painter.drawString(text, 0, 0);
+				Painter.matrix = null;
 			}
 		}
 	}
@@ -66,19 +48,16 @@ class Text extends Graphic
 	{
 		visible = data.visible.parse(true);
 		text = data.text.parse("");
-		alpha = data.alpha.parse(1.0);
-		color = data.color.parseColor(Color.White);
 		
 		var file:String = data.font.file;
 		var size:Float = data.font.size;
 		var style:FontStyle = data.style.parseFontStyle(FontStyle.Default);
-		if (file != null && data.font.size != null && size > 0.0)
+		if (file != null && data.font.size != null && size > 0)
 			font = Loader.the.loadFont(file, style, size);
 	}
 	
-	private inline function get_width():Float { return font.stringWidth(text); }
-	
-	private inline function get_height():Float { return font.getHeight(); }
+	private override function get_width():Float { return font.stringWidth(text); }
+	private override function get_height():Float { return font.getHeight(); }
 	
 	private inline function get_size():Float { return font.size; }
 	private inline function set_size(value:Float):Float

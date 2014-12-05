@@ -20,7 +20,6 @@ import CompileTime;
 import komponent.utils.Misc;
 import komponent.utils.Time;
 import komponent.utils.Painter;
-import komponent.utils.Painter2;
 import komponent.utils.Screen;
 import komponent.input.Input;
 
@@ -126,8 +125,9 @@ class Engine extends Game
 		}		
 		_startScene = null;
 		
-		// create backbuffer for rendering
+		// create backbuffer for rendering and init Painter
 		backbuffer = Image.createRenderTarget(width, height);
+		Painter.backbuffer = backbuffer;
 		
 		Configuration.setScreen(this);
 	}
@@ -146,14 +146,10 @@ class Engine extends Game
 	override public function render(framebuffer:Framebuffer):Void
 	{
 		Time.start("rendering");
-		
-		backbuffer.g2.color = Screen.color;
-		backbuffer.g2.opacity = 1;
-		backbuffer.g2.begin();
-		Painter.backbuffer = backbuffer;
-		Painter2.backbuffer = backbuffer;
+		Painter.set(Screen.color, 1);
+		Painter.g2.begin();
 		currentScene.render();
-		backbuffer.g2.end();
+		Painter.g2.end();
 		
 		startRender(framebuffer);
 		Scaler.scale(backbuffer, framebuffer, Sys.screenRotation);
@@ -178,7 +174,6 @@ class Engine extends Game
 	{
 		if (currentScene != null)
 		{
-			currentScene.sendMessage("onSceneChanged");
 			currentScene.end();
 		}
 		if (currentScene == value)

@@ -4,8 +4,7 @@ import kha.Starter;
 
 import komponent.Engine;
 
-import scene.GameScene;
-
+import scene.MatrixTest;
 
 class Main
 {
@@ -13,7 +12,7 @@ class Main
 	public static function main()
 	{
 		var starter = new Starter();
-		starter.start(new Engine("Test", ["default"], GameScene));
+		starter.start(new Engine("Test", ["default"], MatrixTest));
 	}
 	
 }

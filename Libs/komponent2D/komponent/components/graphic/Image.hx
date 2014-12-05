@@ -5,27 +5,16 @@ import kha.Loader;
 import kha.Rectangle;
 import kha.Image in KhaImage;
 
+import komponent.utils.Misc;
 import komponent.components.Graphic;
 import komponent.utils.Painter;
-import komponent.utils.Painter2;
 import komponent.utils.Screen;
+import komponent.ds.Matrix;
 
 using komponent.utils.Parser;
 
 class Image extends Graphic
 {
-	
-	public var width(get, never):Int;
-	public var height(get, never):Int;
-	
-	public var alpha:Float;
-	public var color:Color;
-	
-	/**
-	 * If the image should be flipped horizontally or vertically.
-	 */
-	public var flipX:Bool;
-	public var flipY:Bool;
 	
 	/**
 	 * If one of these values is higher than the images width/height
@@ -46,14 +35,11 @@ class Image extends Graphic
 	 */
 	public var sourceRect:Rectangle;
 	
-	private var _image:KhaImage;
+	private var image:KhaImage;
 
 	override public function added() 
 	{
 		super.added();
-		alpha = 1;
-		color = Color.White;
-		flipX = flipY = false;
 		
 		tiledWidth = tiledHeight = 0;
 		fillScreen = false;
@@ -61,34 +47,24 @@ class Image extends Graphic
 	
 	override public function render()
 	{	
-		if (visible && _image != null)
+		if (visible && image != null)
 		{
 			Painter.set(color, alpha);
-			
 			for (camera in Screen.cameras)
-			{
-				if (!Painter.fallbackPainter)
-				{
-					Painter.matrix = camera.matrix * transform.matrix;
-					
-					Painter.drawScaledTiledSubImage(_image, 0, 0, flipX, flipY, sourceRect,
-										tiledWidth, tiledHeight, fillScreen);
-					Painter.matrix = null;
-				}
+			{				
+				Painter.matrix = camera.matrix * matrix;
+				if (sourceRect == null)
+					Painter.drawImage(image, 0, 0)
 				else
-				{
-					Painter2.camera = camera;
-					Painter2.setScale(transform.localScaleX, transform.localScaleY);
-					Painter2.drawImage5(_image, transform.x, transform.y, transform.rotation, 0, 0,
-										flipX, flipY, sourceRect, tiledWidth, tiledHeight, fillScreen);
-				}
+					Painter.drawSubImage(image, 0, 0, sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height);
+				Painter.matrix = null;
 			}
 		}
 	}
 	
-	public inline function load(image:String)
+	public inline function load(assetName:String)
 	{
-		_image = Loader.the.getImage(image);
+		this.image = Loader.the.getImage(assetName);
 	}
 	
 	public inline function setSourceRectangle(x:Float, y:Float, width:Float, height:Float)
@@ -119,8 +95,6 @@ class Image extends Graphic
 		var file:String = data.file;
 		if (file != null) load(file);
 		
-		alpha = data.alpha.parse(1.0);
-		color = data.color.parseColor(Color.White);
 		flipX = data.flipX.parse(false);
 		flipY = data.flipY.parse(false);
 		tiledWidth = data.tiledWidth.parse(0);
@@ -129,6 +103,6 @@ class Image extends Graphic
 		sourceRect = data.sourceRectangle.parseRect(null);
 	}
 	
-	private inline function get_width():Int { return (sourceRect == null) ? _image.width : Math.floor(sourceRect.width); }
-	private inline function get_height():Int { return (sourceRect == null) ? _image.height : Math.floor(sourceRect.height); }
+	private override function get_width():Float { return (sourceRect == null) ? image.width : sourceRect.width; }
+	private override function get_height():Float { return (sourceRect == null) ? image.height : sourceRect.height; }
 }

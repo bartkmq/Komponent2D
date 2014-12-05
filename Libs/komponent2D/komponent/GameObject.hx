@@ -108,12 +108,12 @@ class GameObject
 	/**
 	 * Adds a Component to the GameObject.
 	 * @param	component	Component type to add.
-	 * @return	The added component instance or null.
+	 * @return	The added component instance.
 	 */
 	public inline function addComponent<T:Component>(componentType:Class<T>):T
 	{
 		if (Std.is(componentType, Transform))
-			return null;
+			return cast transform;
 		var component = Type.createInstance(componentType, []);
 		
 		// add components required by the new component

@@ -161,7 +161,7 @@ class Painter
 	private static inline function get_matrix():Matrix { return g2.transformation; }
 	private static inline function set_matrix(value:Matrix):Matrix
 	{
-		if (value == null) g2.transformation = Matrix.identity();
+		if (value == null) g2.popTransformation();
 		else g2.transformation = value;
 		return value;
 	}

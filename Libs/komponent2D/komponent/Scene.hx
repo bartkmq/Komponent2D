@@ -16,7 +16,6 @@ class Scene
 	* -> onGameObjectAdded(gameObject) when a GameObject is added to this scene.
 	* -> onGameObjectRemoved(gameObject) when a GameObject is removed from this scene.
 	* -> onQuit() when the game is quit
-	* -> onSceneChanged() when this scene is removed.
 	*/
 	
 	public var engine:Engine;
@@ -189,9 +188,11 @@ class Scene
 			graphics.push(graphic);
 		else
 		{
+			var newLayer:Int = graphic.gameObject.transform.layer;
 			for (i in 0...graphics.length)
 			{
-				if (graphics[i].layer >= graphic.layer)
+				var currentLayer:Int = graphics[i].gameObject.transform.layer;
+				if (currentLayer >= newLayer)
 				{
 					graphics.insert(i, graphic);
 					break;
@@ -216,6 +217,7 @@ class Scene
 		sendMessage("onGameObjectAdded", gameObject);
 	}
 	
+	@:noCompletion
 	private inline function addName(name:String, object:GameObject):Void
 	{
 		if (names[name] == null)
@@ -228,6 +230,7 @@ class Scene
 			names[name].add(object);
 	}
 	
+	@:noCompletion
 	private inline function removeName(name:String, object:GameObject):Void
 	{
 		if (names[name].length == 1)

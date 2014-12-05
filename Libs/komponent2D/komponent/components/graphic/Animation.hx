@@ -50,8 +50,8 @@ class Animation extends Image
 				var sx = _frameWidth * _frame;
 				var sy = Std.int(sx / width) * _frameHeight;
 				var sx = sx % width;
-				if (flipX) sx = (width - _frameWidth) - sx;
-				if (flipY) sy = (height - _frameHeight) - sy; // TODO: Test
+				if (flipX) sx = (Math.floor(width) - _frameWidth) - sx;
+				if (flipY) sy = (Math.floor(height) - _frameHeight) - sy; // TODO: Test
 				
 				setSourceRectangle(sx, sy, _frameWidth, _frameHeight);
 			}
