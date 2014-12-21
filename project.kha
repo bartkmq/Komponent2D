@@ -7,40 +7,64 @@
 	},
 	"assets": [
 		{
-			"id": "519a02c2-7859-451a-905b-2148aacd5d6d",
-			"type": "image",
-			"file": "wabbit.png",
-			"name": "wabbit"
-		},
-		{
-			"id": "9ed239cd-88b9-483f-bc86-bf8abe551a07",
-			"type": "blob",
-			"file": "roboto18.kravur",
-			"name": "roboto18.kravur"
-		},
-		{
-			"id": "3bb2b0dd-e70b-4029-84ea-4ef00f019879",
+			"id": "628a0eb1-a34d-4569-8104-8fa75c7fc661",
 			"type": "image",
 			"file": "coinspin.png",
 			"name": "coinspin"
 		},
 		{
-			"id": "bfcb048b-0d54-4d4d-bb98-077811b2c9ba",
-			"type": "blob",
-			"file": "example.yaml",
-			"name": "example"
-		},
-		{
-			"id": "ff3bc496-298f-4e27-8b68-446bbe28fc7a",
+			"id": "99259631-e410-4be6-b563-f77fcb0dccb7",
 			"type": "image",
 			"file": "ground.png",
 			"name": "ground"
 		},
 		{
-			"id": "3f4b2034-29c3-4efa-991a-d43b5129102f",
+			"id": "ef8cc1bc-6b08-4f3c-9e18-58e7d8175587",
 			"type": "image",
 			"file": "player_default.png",
 			"name": "player_default"
+		},
+		{
+			"id": "5781cc68-914b-4e1d-acbe-9ebe28d19e0b",
+			"type": "image",
+			"file": "playerShip1_red.png",
+			"name": "playerShip1_red"
+		},
+		{
+			"id": "ddbc1a37-b4c6-426d-addc-6ea8acf46109",
+			"type": "image",
+			"file": "wabbit.png",
+			"name": "wabbit"
+		},
+		{
+			"id": "32183153-7fe7-4d92-b648-6d9148d8d857",
+			"type": "blob",
+			"file": "Arial14.kravur",
+			"name": "Arial14.kravur"
+		},
+		{
+			"id": "4f7475c2-a0c5-46c8-a6db-9ab2c2723054",
+			"type": "blob",
+			"file": "Arimo20.kravur",
+			"name": "Arimo20.kravur"
+		},
+		{
+			"id": "02d340af-85af-4241-9969-b6212fcd7d18",
+			"type": "blob",
+			"file": "example.yaml",
+			"name": "example"
+		},
+		{
+			"id": "c9ad7245-4a20-408d-a0a3-1b414cdebd09",
+			"type": "blob",
+			"file": "roboto18.kravur",
+			"name": "roboto18.kravur"
+		},
+		{
+			"id": "6bf4377b-21fd-4bb9-80ae-4094ef1e0b32",
+			"type": "image",
+			"file": "Rect.png",
+			"name": "Rect"
 		}
 	],
 	"rooms": [
@@ -50,19 +74,23 @@
 			"parent": null,
 			"neighbours": [],
 			"assets": [
-				"519a02c2-7859-451a-905b-2148aacd5d6d",
-				"3bb2b0dd-e70b-4029-84ea-4ef00f019879",
-				"9ed239cd-88b9-483f-bc86-bf8abe551a07",
-				"bfcb048b-0d54-4d4d-bb98-077811b2c9ba",
-				"ff3bc496-298f-4e27-8b68-446bbe28fc7a",
-				"3f4b2034-29c3-4efa-991a-d43b5129102f"
+				"628a0eb1-a34d-4569-8104-8fa75c7fc661",
+				"99259631-e410-4be6-b563-f77fcb0dccb7",
+				"ef8cc1bc-6b08-4f3c-9e18-58e7d8175587",
+				"5781cc68-914b-4e1d-acbe-9ebe28d19e0b",
+				"ddbc1a37-b4c6-426d-addc-6ea8acf46109",
+				"32183153-7fe7-4d92-b648-6d9148d8d857",
+				"4f7475c2-a0c5-46c8-a6db-9ab2c2723054",
+				"02d340af-85af-4241-9969-b6212fcd7d18",
+				"c9ad7245-4a20-408d-a0a3-1b414cdebd09",
+				"6bf4377b-21fd-4bb9-80ae-4094ef1e0b32"
 			]
 		}
 	],
 	"sources": [
 		"Libs/komponent2D",
-        "Libs/hx-yaml/src/",
-        "Libs/hxcollision",
-        "Libs/compiletime/src"
+		"Libs/hx-yaml/src/",
+		"Libs/hxcollision",
+		"Libs/compiletime/src"
 	]
 }

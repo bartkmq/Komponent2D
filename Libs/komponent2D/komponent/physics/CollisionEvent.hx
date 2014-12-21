@@ -4,6 +4,5 @@ enum CollisionEvent
 {
 	BEGIN;
 	ONGOING;
-	// Currently not implemented!
-	END;
+	END; // Currently not implemented!
 }

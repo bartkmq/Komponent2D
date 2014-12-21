@@ -72,7 +72,7 @@ class Keyboard //TODO: Fix pressed()
 	 * @param	input		An input name or key to check for.
 	 * @return	True or false.
 	 */
-	public static inline function pressed(input:String):Bool
+	public static function pressed(input:String):Bool
 	{
 		// if Input doesn't exists return false
 		var definition = _definitions[input];
@@ -107,7 +107,7 @@ class Keyboard //TODO: Fix pressed()
 	 * @param	input		An input name or key to check for.
 	 * @return	True or false.
 	 */
-	public static inline function released(input:String):Bool
+	public static function released(input:String):Bool
 	{
 		// if Input doesn't exists return false
 		var definition = _definitions[input];

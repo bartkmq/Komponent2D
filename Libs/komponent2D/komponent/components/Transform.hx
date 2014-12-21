@@ -5,6 +5,9 @@ import kha.Color;
 import komponent.GameObject;
 import komponent.utils.Painter;
 import komponent.utils.Screen;
+import komponent.utils.Misc;
+import komponent.ds.Matrix;
+import komponent.components.misc.Camera;
 
 using komponent.utils.Parser;
 
@@ -26,6 +29,10 @@ class Transform extends Component
 	public var scaleX(default, null):Float;
 	public var scaleY(default, null):Float;
 	
+	public var layer(default, null):Int;
+	
+	public var matrix(get, null):Matrix;
+	
 	/**
 	 * Variables starting with "local" are the offset of this Transform to it's parent.
 	 * If this Transform has no parent the variables equal the ones in world space
@@ -37,6 +44,8 @@ class Transform extends Component
 	
 	public var localScaleX(default, set):Float;
 	public var localScaleY(default, set):Float;
+	
+	public var localLayer(default, set):Int;
 	
 	/**
 	 * The parent Transform of this Transform.
@@ -62,11 +71,15 @@ class Transform extends Component
 	
 	override public function debugDraw()
 	{
-		Painter.set(Color.fromBytes(0, 0, 255), 1);
-		for (camera in Screen.cameras)
+		if (!hasComponent(Camera))
 		{
-			Painter.camera = camera;
-			Painter.drawCross(x, y, 10, 10, 2);
+			Painter.set(Color.Blue, 1);
+			for (camera in Screen.cameras)
+			{
+				Painter.matrix = camera.matrix * transform.matrix;
+				Painter.drawCross(0, 0, 10, 10, 2);
+				Painter.matrix = null;
+			}
 		}
 	}
 	
@@ -76,16 +89,19 @@ class Transform extends Component
 		this.localY = y;
 	}
 	
+	public inline function setScale(scaleX:Float, scaleY:Float):Void
+	{
+		this.localScaleX = scaleX;
+		this.localScaleY = scaleY;
+	}
+	
 	/**
 	 * Makes this Transform to the child of another GameObject.
 	 * @param	otherGameObject
 	 */
 	public inline function attachTo(otherGameObject:GameObject):Void
 	{
-		if (gameObject != null)
-		{
-			parent = otherGameObject.transform;
-		}
+		parent = otherGameObject.transform;
 	}
 	
 	/**
@@ -94,7 +110,6 @@ class Transform extends Component
 	 */
 	public inline function attach(otherGameObject:GameObject):Void
 	{
-		children.push(otherGameObject.transform);
 		otherGameObject.transform.parent = this;
 	}
 	
@@ -104,7 +119,6 @@ class Transform extends Component
 	 */
 	public inline function detach(otherGameObject:GameObject)
 	{
-		children.remove(otherGameObject.transform);
 		otherGameObject.transform.parent = null;
 	}
 	
@@ -129,11 +143,13 @@ class Transform extends Component
 		localRotation = 0;
 		localScaleX = 1;
 		localScaleY = 1;
+		localLayer = 0;
 	}
 	
 	private function updateWorldTransformation()
 	{
 		resetWorld();
+		matrix = null;
 		var current:Transform = this;
 		while (current != null)
 		{
@@ -142,15 +158,12 @@ class Transform extends Component
 			rotation += current.localRotation;
 			scaleX *= current.localScaleX;
 			scaleY *= current.localScaleY;
+			layer += current.localLayer;
 			
 			current = current.parent;
 		}
 		sendMessage("onTransformChange", this);
-		updateChildrensWorldTransformations();
-	}
-	
-	private function updateChildrensWorldTransformations()
-	{
+		
 		for (child in children)
 			child.updateWorldTransformation();
 	}
@@ -162,6 +175,7 @@ class Transform extends Component
 		rotation = 0;
 		scaleX = 1;
 		scaleY = 1;
+		layer = 0;
 	}
 	
 	override public function loadConfig(data:Dynamic):Void
@@ -186,7 +200,16 @@ class Transform extends Component
 		return transform;
 	}
 	
-	private inline function set_parent(value:Transform) { parent = value; updateWorldTransformation(); return value; }
+	private inline function set_parent(value:Transform)
+	{ 
+		if (value == null)
+			parent.children.remove(this);
+		else if (!Misc.contains(value.children, this))
+			value.children.push(this);
+		parent = value;
+		updateWorldTransformation();
+		return value;
+	}
 	
 	private inline function set_localX(value:Float):Float { localX = value; updateWorldTransformation(); return value; }
 	private inline function set_localY(value:Float):Float { localY = value; updateWorldTransformation(); return value; }
@@ -195,4 +218,17 @@ class Transform extends Component
 	
 	private inline function set_localScaleX(value:Float):Float { localScaleX = value; updateWorldTransformation(); return value; }
 	private inline function set_localScaleY(value:Float):Float { localScaleY = value; updateWorldTransformation(); return value; }
+	
+	private inline function set_localLayer(value:Int):Int { localLayer = value; updateWorldTransformation(); return value; }
+	
+	private function get_matrix():Matrix
+	{
+		if (matrix == null)
+		{
+			matrix = Matrix.translation(x, y) *
+			 		 Matrix.scale(scaleX, scaleY) *
+					 Matrix.rotation(rotation * Math.PI / 180);
+		}
+		return matrix;
+	}
 }

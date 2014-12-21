@@ -4,9 +4,8 @@ import komponent.Component;
 import komponent.GameObject;
 import komponent.ds.Point;
 import komponent.components.Physics;
-import komponent.extension.Nape;
 
-class Navigator<T> extends Component
+class Navigator extends Component
 {
 	
 	public var target(default, set):Point;
@@ -35,7 +34,7 @@ class Navigator<T> extends Component
 	
 	// Called when the Navigator should move.
 	// Navigator, NavgiationData
-	public var movementHandler:Navigator->T->Void;
+	public var movementHandler:Navigator->NavigationData->Void;
 	
 	public var maxVelocity:Float;
 	public var acceleration:Float;
@@ -65,10 +64,8 @@ class Navigator<T> extends Component
 	}
 	
 	override public function update()
-	{
-		//remainingDistance = 
-		
-		movementHandler(this, remainingDistance, target);
+	{		
+		//movementHandler(this, remainingDistance, target);
 	}
 	
 	public function follow(gameObject:GameObject):Void
@@ -111,13 +108,13 @@ class Navigator<T> extends Component
 	}
 	
 	// moves by modifying the objects Transform
-	private function simpleMovement():Void
+	private function simpleMovement(_, _):Void
 	{
 		
 	}
 	
 	// moves by appling a impulse to the objects Physics
-	private function physicalMovement():Void
+	private function physicalMovement(_, _):Void
 	{
 		
 	}
@@ -128,6 +125,7 @@ class Navigator<T> extends Component
 		clearPath();
 		path.push(target);
 		status = NAVIGATING;
+		return true;
 	}
 	
 	private function clearPath():Void
@@ -148,13 +146,13 @@ class Navigator<T> extends Component
 enum NavigatorStatus
 {
 	// Currently navigating to the target.
-	NAVIGATING
+	NAVIGATING;
 	// The navigation was stopped/paused and the Navigator is deaccelerating.
-	STOPPING
+	STOPPING;
 	// The navigation is stopped.
-	STOPPED
+	STOPPED;
 	// The navigation is paused and can be resumed.
-	PAUSED
+	PAUSED;
 }
 
 class NavigationData

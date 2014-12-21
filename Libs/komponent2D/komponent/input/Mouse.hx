@@ -1,7 +1,9 @@
 package komponent.input;
 
 import kha.input.Mouse in KhaMouse;
+import kha.math.Vector2;
 
+import komponent.ds.Point;
 import komponent.utils.Screen;
 
 enum MouseButton
@@ -89,16 +91,10 @@ class Mouse
 	public static var y:Int;
 	
 	/**
-	 * The touch x-axis coord in the scene.
+	 * The touch position in the scene.
 	 */
-	public static var sceneX(get, never):Float;
-	private static inline function get_sceneX():Float { return (x - Screen.camera.x - Screen.halfWidth) / Screen.camera.fullScaleX + Screen.halfWidth; }
-
-	/**
-	 * The touch y-axis coord in the scene.
-	 */
-	public static var sceneY(get, never):Float;
-	private static inline function get_sceneY():Float { return (y - Screen.camera.x - Screen.halfHeight) / Screen.camera.fullScaleY + Screen.halfHeight; }
+	public static var scene(get, never):Point;
+	private static inline function get_scene():Point { return Screen.camera.matrix.multvec(new Vector2(x, y)); }
 	
 	public static function check(mouseButton:MouseButton):Bool
 	{

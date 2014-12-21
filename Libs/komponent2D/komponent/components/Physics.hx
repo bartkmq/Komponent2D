@@ -150,7 +150,7 @@ class Physics extends Component
 	{
 		velocityX = computeVelocity(velocityX, accelerationX, gravityX, dragX);
 		velocityY = computeVelocity(velocityY, accelerationY, gravityY, dragY);
-		angularVelocity = computeVelocity(angularVelocity, angularAcceleration, 1, angularDrag);
+		angularVelocity = computeVelocity(angularVelocity, angularAcceleration, 0, angularDrag);
 		
 		limitVelocity();
 		

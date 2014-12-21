@@ -2,12 +2,16 @@ package komponent.components.misc;
 
 import komponent.components.Transform;
 import komponent.utils.Screen;
+import komponent.utils.Misc;
+import komponent.ds.Matrix;
 
 class Camera extends Component
 {
 	
 	public var x(get, set):Float;
 	public var y(get, set):Float;
+	
+	public var rotation(get, set):Float;
 	
 	public var scaleX(default, set):Float = 1;
 	public var scaleY(default, set):Float = 1;
@@ -17,17 +21,15 @@ class Camera extends Component
 	public var fullScaleX(default, null):Float = 1;
 	public var fullScaleY(default, null):Float = 1;
 	
-	private var _transform:Transform;
+	public var matrix(get, null):Matrix;
 	
 	override public function added()
 	{
 		if (Screen.camera != null)
 			trace("Only one Camera is currently supported.");
 		else
-		{
 			Screen.camera = this;
-			_transform = transform;
-		}
+		
 		Screen.cameras.push(this);
 	}
 	
@@ -45,16 +47,20 @@ class Camera extends Component
 		zoom = data.zoom.parse(1.0);
 	}
 	
-	private inline function get_x():Float { return _transform.x; }
-	private inline function set_x(value:Float):Float { return _transform.localX = value; }
+	private inline function get_x():Float { return transform.x; }
+	private inline function set_x(value:Float):Float { return transform.localX = value; }
 	
-	private inline function get_y():Float { return _transform.y; }
-	private inline function set_y(value:Float):Float { return _transform.localY = value; }
+	private inline function get_y():Float { return transform.y; }
+	private inline function set_y(value:Float):Float { return transform.localY = value; }
+	
+	private inline function get_rotation():Float { return transform.rotation; }
+	private inline function set_rotation(value:Float):Float { return transform.localRotation = value; }
 	
 	private inline function set_scaleX(value:Float):Float
 	{
 		scaleX = value;
 		fullScaleX = scaleX * zoom;
+		matrix = null;
 		return scaleX;
 	}
 	
@@ -62,6 +68,7 @@ class Camera extends Component
 	{
 		scaleY = value;
 		fullScaleY = scaleY * zoom;
+		matrix = null;
 		return scaleY;
 	}
 	
@@ -70,6 +77,29 @@ class Camera extends Component
 		zoom = value;
 		fullScaleX = scaleX * zoom;
 		fullScaleY = scaleY * zoom;
+		matrix = null;
 		return zoom;
+	}
+	
+	private function onTransformChange(_)
+	{
+		matrix = null;
+	}
+	
+	private function onSceneChanged(_)
+	{
+		removed();
+	}
+	
+	private inline function get_matrix():Matrix
+	{
+		if (matrix == null)
+		{
+			matrix = Matrix.translation(Misc.engine.backbuffer.width / 2, Misc.engine.backbuffer.height / 2) *
+					 Matrix.scale(fullScaleX, fullScaleY) *
+					 Matrix.rotation(rotation * Math.PI / 180) *
+					 Matrix.translation(x, y);
+		}
+		return matrix;
 	}
 }

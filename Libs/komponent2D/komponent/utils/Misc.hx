@@ -3,6 +3,9 @@ package komponent.utils;
 import kha.Color;
 import kha.FontStyle;
 import kha.Rectangle;
+import kha.math.Vector2;
+
+import komponent.ds.Point;
 
 class Misc
 {
@@ -72,5 +75,10 @@ class Misc
 		value = Math.abs(value);
 		if (value > max) value = max;
 		return value * sign;
+	}
+	
+	public static inline function pointsToVector2(points:Array<Point>):Array<Vector2>
+	{
+		return [for (point in points) point];
 	}
 }
