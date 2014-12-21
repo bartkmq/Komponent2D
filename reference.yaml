@@ -83,9 +83,9 @@ GameObject:
 
     -
       type: *Camera
-        scaleX: 1.0
-        scaleY: 1.0
-        zoom: 1.0
+      scaleX: 1.0
+      scaleY: 1.0
+      zoom: 1.0
 
     -
       type: *Debug

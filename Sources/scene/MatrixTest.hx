@@ -5,8 +5,8 @@ import kha.Key;
 import kha.FontStyle;
 import kha.Loader;
 import kha.Color;
-import komponent.ds.Matrix;
 
+import komponent.ds.Matrix;
 import komponent.GameObject;
 import komponent.Scene;
 import komponent.components.misc.Camera;

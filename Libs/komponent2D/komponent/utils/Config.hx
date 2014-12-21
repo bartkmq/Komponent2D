@@ -19,13 +19,17 @@ class Config
 		else
 		{
 			var blob = Loader.the.getBlob(filename).toString();
-			
-			var parserOptions = new ParserOptions();
-			parserOptions.useObjects();
-			parserOptions.strict = strict;
-			parserOptions.validation = validation;
-			return Yaml.parse(blob, parserOptions);
+			return loadFromString(blob, strict, validation);
 		}
+	}
+	
+	public static function loadFromString(yaml:String, strict:Bool = false, validation = true):Dynamic
+	{
+		var parserOptions = new ParserOptions();
+		parserOptions.useObjects();
+		parserOptions.strict = strict;
+		parserOptions.validation = validation;
+		return Yaml.parse(yaml, parserOptions);
 	}
 	
 	public static function render(config:Dynamic):String
