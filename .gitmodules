@@ -1,7 +1,3 @@
-[submodule "Kha"]
-	path = Kha
-	url = ../Kha
-	branch = master
 [submodule "Libs/hx-yaml"]
 	path = Libs/hx-yaml
 	url = https://github.com/mikestead/hx-yaml.git
@@ -11,3 +7,6 @@
 [submodule "Libs/compiletime"]
 	path = Libs/compiletime
 	url = https://github.com/jasononeil/compiletime.git
+[submodule "Kha"]
+	path = Kha
+	url = https://github.com/KTXSoftware/Kha
