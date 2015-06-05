@@ -7,3 +7,6 @@
 [submodule "Libs/compiletime"]
 	path = Libs/compiletime
 	url = https://github.com/jasononeil/compiletime.git
+[submodule "Kha"]
+	path = Kha
+	url = https://github.com/KTXSoftware/Kha.git
