@@ -75,10 +75,17 @@ class Graphic extends Component
 	{
 		if (matrix == null)
 		{
+			/*
 			matrix = Matrix.translation(transform.x, transform.y) *
 					 Matrix.scale(transform.scaleX * -Misc.sign(flipX), transform.scaleY * -Misc.sign(flipY)) *
 					 Matrix.rotation(transform.rotation * Misc.toRad) *
 					 Matrix.translation( - width / 2, - height / 2);
+			*/
+			var translation = Matrix.translation(transform.x, transform.y);
+			var scale = Matrix.scale(transform.scaleX * -Misc.sign(flipX), transform.scaleY * -Misc.sign(flipY));
+			var rotation = Matrix.rotation(transform.rotation * Misc.toRad);
+			var centerTranslation = Matrix.translation( - width / 2, - height / 2);
+			matrix = centerTranslation.multmat(rotation.multmat(translation.multmat(scale)));
 		}
 		return matrix;
 	}

@@ -76,7 +76,8 @@ class Transform extends Component
 			Painter.set(Color.Blue, 1);
 			for (camera in Screen.cameras)
 			{
-				Painter.matrix = camera.matrix * transform.matrix;
+				//Painter.matrix = camera.matrix * transform.matrix;
+				Painter.matrix = camera.matrix.multmat(transform.matrix);
 				Painter.drawCross(0, 0, 10, 10, 2);
 				Painter.matrix = null;
 			}
@@ -225,9 +226,12 @@ class Transform extends Component
 	{
 		if (matrix == null)
 		{
+			/*
 			matrix = Matrix.translation(x, y) *
 			 		 Matrix.scale(scaleX, scaleY) *
 					 Matrix.rotation(rotation * Math.PI / 180);
+			*/
+			matrix = Matrix.rotation(rotation * Misc.toRad).multmat(Matrix.translation(x, y).multmat(Matrix.scale(scaleX, scaleY)));
 		}
 		return matrix;
 	}

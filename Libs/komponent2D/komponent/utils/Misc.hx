@@ -48,7 +48,7 @@ class Misc
 	public static inline function clear(array:Array<Dynamic>)
 	{
 		#if (cpp || php)
-		array.splice(0, array.length)
+		array.splice(0, array.length);
 		#else
 		untyped array.length = 0;
 		#end

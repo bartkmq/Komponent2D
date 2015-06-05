@@ -134,7 +134,7 @@ abstract Point(PointData) from PointData to PointData
 		a.y /= b.y;
 		return a;
 	}
-
+	/*
 	@:op(A *= B) private static inline function _multiplyEqualsMatrix(v:Point, m:Matrix3):Point
 	{
 		var f:Float = 0;
@@ -175,7 +175,7 @@ abstract Point(PointData) from PointData to PointData
 		point.y = f / w;
 		return point;
 	}
-	
+	*/
 	/*
 	@:op(A * B) private static inline function _multiplyInverseMatrix(m:Matrix3, v:Point):Point
 	{

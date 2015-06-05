@@ -20,7 +20,7 @@ class Debug extends Component
 	
 	override public function added()
 	{
-		font = Loader.the.loadFont("roboto", FontStyle.Default, 18);
+		//font = Loader.the.loadFont("roboto", FontStyle.Default, 18);
 	}
 	
 	override public function debugDraw()
@@ -34,12 +34,12 @@ class Debug extends Component
 			if (image != null)
 				width = image.width;
 			
-			Painter.set(Color.White, 1, font);
+			//Painter.set(Color.White, 1, font);
 			
 			for (camera in Screen.cameras)
 			{
-				Painter.matrix = camera.matrix * transform.matrix;
-				Painter.drawString(gameObject.toString(), width + 10, 0);
+				//Painter.matrix = camera.matrix * transform.matrix;
+				//Painter.drawString(gameObject.toString(), width + 10, 0);
 				Painter.matrix = null;
 			}
 		}

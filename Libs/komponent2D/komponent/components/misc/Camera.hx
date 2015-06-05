@@ -95,10 +95,18 @@ class Camera extends Component
 	{
 		if (matrix == null)
 		{
+			/* with op overloading
 			matrix = Matrix.translation(Misc.engine.backbuffer.width / 2, Misc.engine.backbuffer.height / 2) *
 					 Matrix.scale(fullScaleX, fullScaleY) *
 					 Matrix.rotation(rotation * Math.PI / 180) *
 					 Matrix.translation(x, y);
+			*/		 
+			var translation = Matrix.translation(Misc.engine.backbuffer.width / 2, Misc.engine.backbuffer.height / 2);
+			var scale = Matrix.scale(fullScaleX, fullScaleY);
+			var rotation = Matrix.rotation(rotation * Math.PI / 180);
+			var cameraTranslation = Matrix.translation(x, y);
+			
+			matrix = cameraTranslation.multmat(rotation.multmat(translation.multmat(scale)));
 		}
 		return matrix;
 	}

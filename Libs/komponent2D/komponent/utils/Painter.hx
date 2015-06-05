@@ -127,7 +127,7 @@ class Painter
 	{
 		Painter.color = color;
 		Painter.alpha = alpha;
-		Painter.font = font;
+		//Painter.font = font;
 	}
 	
 	private static inline function set_backbuffer(value:Image):Image

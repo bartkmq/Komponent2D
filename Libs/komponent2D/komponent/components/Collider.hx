@@ -51,7 +51,8 @@ class Collider extends Component
 		Painter.set(Color.White, 1);
 		for (camera in Screen.cameras)
 		{
-			Painter.matrix = transform.matrix * camera.matrix;
+			//Painter.matrix = transform.matrix * camera.matrix;
+			Painter.matrix = transform.matrix.multmat(camera.matrix);
 			Painter.drawPolygon(0, 0, Misc.pointsToVector2(vertices));
 			Painter.matrix = null;
 		}

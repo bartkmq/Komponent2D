@@ -51,7 +51,8 @@ class Time
 		return Date.now().getTime() / 60;
 		#end
 	}
-	private static inline function get_elapsed():Float { return Scheduler.deltaTime; }
+	// TODO: FIX!
+	private static inline function get_elapsed():Float { return 1/60; }
 	
 	private static inline function get_scale():Float { return Scheduler.deltaScale; }
 	private static inline function set_scale(value:Float):Float { return Scheduler.deltaScale = value; }

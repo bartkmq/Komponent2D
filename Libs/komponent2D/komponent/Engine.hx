@@ -158,7 +158,7 @@ class Engine extends Game
 		Time.stop("rendering");
 	}
 	
-	override public function onClose():Void
+	override public function onShutdown():Void
 	{
 		currentScene.quit();
 	}

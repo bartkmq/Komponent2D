@@ -52,7 +52,8 @@ class Image extends Graphic
 			Painter.set(color, alpha);
 			for (camera in Screen.cameras)
 			{				
-				Painter.matrix = camera.matrix * matrix;
+				//Painter.matrix = camera.matrix * matrix;
+				Painter.matrix = camera.matrix.multmat(matrix);
 				if (sourceRect == null)
 					Painter.drawImage(image, 0, 0)
 				else

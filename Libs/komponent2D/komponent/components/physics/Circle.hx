@@ -23,7 +23,8 @@ class Circle extends Collider
 		Painter.set(Color.White, 1);
 		for (camera in Screen.cameras)
 		{
-			Painter.matrix = transform.matrix * camera.matrix;
+			//Painter.matrix = transform.matrix * camera.matrix;
+			Painter.matrix = transform.matrix.multmat(camera.matrix);
 			Painter.drawCircle(0, 0, radius);
 			Painter.matrix = null;
 		}

@@ -29,7 +29,7 @@ class MatrixTest extends Scene
 	
 	override public function begin()
 	{
-		font = Loader.the.loadFont("Arimo", new FontStyle(false, false, false), 20);
+		//font = Loader.the.loadFont("Arimo", new FontStyle(false, false, false), 20);
 		
 		var camera = new GameObject("Camera", 0, 0);
 		camera.addComponent(Camera);
@@ -40,7 +40,7 @@ class MatrixTest extends Scene
 		ship.transform.localLayer = -1;
 		
 		var name = new GameObject("ShipName", 0, -60);
-		name.addComponent(Text).set("Ship", font);
+		//name.addComponent(Text).set("Ship", font);
 		name.transform.localScaleX = name.transform.localScaleY = 2;
 		name.transform.attachTo(ship);
 		
@@ -75,7 +75,7 @@ class MatrixTest extends Scene
 	override public function render()
 	{
 		super.render();
-		
+		/*
 		Painter.matrix = Matrix.identity();
 		Painter.set(Color.White, 1.0, font);
 		Painter.drawString("Movement: wasd", 6, 4);
@@ -101,6 +101,7 @@ class MatrixTest extends Scene
 		Painter.matrix = Matrix.identity();
 		
 		Painter.drawString("Switch(Space)", 500, 44);
+		*/
 	}
 	
 }

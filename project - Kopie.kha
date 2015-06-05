@@ -32,6 +32,26 @@
 			"name": "wabbit"
 		},
 		{
+			"type": "blob",
+			"file": "Arial14.kravur",
+			"name": "Arial14.kravur"
+		},
+		{
+			"type": "blob",
+			"file": "Arimo20.kravur",
+			"name": "Arimo20.kravur"
+		},
+		{
+			"type": "blob",
+			"file": "example.yaml",
+			"name": "example"
+		},
+		{
+			"type": "blob",
+			"file": "roboto18.kravur",
+			"name": "roboto18.kravur"
+		},
+		{
 			"type": "image",
 			"file": "Rect.png",
 			"name": "Rect"
@@ -48,6 +68,10 @@
 				"player_default",
 				"playerShip1_red",
 				"wabbit",
+				"Arial14.kravur",
+				"Arimo20.kravur",
+				"example",
+				"roboto18.kravur",
 				"Rect"
 			]
 		}

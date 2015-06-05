@@ -28,11 +28,12 @@ class Text extends Graphic
 	{
 		if (visible && font != null)
 		{
-			Painter.set(color, alpha, font);
+			//Painter.set(color, alpha, font);
 			for (camera in Screen.cameras)
 			{
-				Painter.matrix = camera.matrix * matrix;
-				Painter.drawString(text, 0, 0);
+				//Painter.matrix = camera.matrix * matrix;
+				Painter.matrix = camera.matrix.multmat(matrix);
+				//Painter.drawString(text, 0, 0);
 				Painter.matrix = null;
 			}
 		}
@@ -62,14 +63,14 @@ class Text extends Graphic
 	private inline function get_size():Float { return font.size; }
 	private inline function set_size(value:Float):Float
 	{
-		font = Loader.the.loadFont(font.name, font.style, value);
+		//font = Loader.the.loadFont(font.name, font.style, value);
 		return value;
 	}
 	
 	private inline function get_fontstyle():FontStyle { return font.style; }
 	private inline function set_fontstyle(value:FontStyle):FontStyle
 	{
-		font = Loader.the.loadFont(font.name, value, font.size);
+		//font = Loader.the.loadFont(font.name, value, font.size);
 		return value;
 	}
 }
